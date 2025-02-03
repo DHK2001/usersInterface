@@ -22,12 +22,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const getActualYear = () => {
+    return new Date().getFullYear();
+  };
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className="border-t border-gray-400 text-gray-400 py-4 text-center sticky bottom-0">
+          <p>© {getActualYear()} User App</p>
+        </footer>
       </body>
     </html>
   );
