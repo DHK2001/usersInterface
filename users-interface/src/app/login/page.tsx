@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Button, Form, Input } from "antd";
+import { loginUser } from "@/services/apis/users-api";
 
 type LoginFormValues = {
   email: string;
@@ -9,8 +10,17 @@ type LoginFormValues = {
 };
 
 const Login: React.FC = () => {
-  const onFinish = (values: LoginFormValues) => {
-    console.log("Login Success:", values);
+
+  const onFinish = async (values: LoginFormValues) => {
+    const loginR = await loginUser(values);
+    
+    if (loginR.status === 200) {
+      console.log("Login Successful:", loginR);
+    } else if (loginR.status === 401) {
+        console.log("Login Failed. Password Incorrect:", loginR);
+    } else {
+        console.log("Login Failed. User not found:", loginR);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {

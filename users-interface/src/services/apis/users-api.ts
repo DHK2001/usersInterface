@@ -114,30 +114,33 @@ export const updateUser = async (
   }
 };
 
-const loginUser = async (
-  user: loginUserDto
-): Promise<loginResponseDto | null> => {
-  const url = `${usersUrl}/users/loginUser`;
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-
-    if (response.status != 200) {
-      throw new Error(`Error: ${response.status} ${response.statusText}`);
+export const loginUser = async (
+    user: loginUserDto
+  ): Promise<{ status: number; data: loginResponseDto | null }> => {
+    const url = `${usersUrl}/users/loginUser`;
+  
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+  
+      const status = response.status;
+  
+      if (!response.ok) {
+        return { status, data: null };
+      }
+  
+      const data = await response.json();
+      return { status, data };
+    } catch (error) {
+      console.error(error);
+      return { status: 500, data: null };
     }
-
-    return response.json();
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
+  };
 
 export const deleteUser = async (id: String): Promise<deleteUserResponse | null> => {
   const url = `${usersUrl}/users/${id}`;
