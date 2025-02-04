@@ -7,11 +7,11 @@ import {
   User,
 } from "../interfaces/users-interfaces";
 
-const usersUrl = "/v1";
+const usersUrl = "http://localhost:8083/v1";
 
-const fetchAllUsers = async (): Promise<User[] | null> => {
+export const fetchAllUsers = async (): Promise<User[] | null> => {
   const url = `${usersUrl}/users`;
-  const tokenAccess = "";
+  const tokenAccess = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM4OTQxNjM4LTQ4REYtRUYxMS04OEY4LTYwNDVCRERCQjI2NSIsImVtYWlsIjoicGFibGl0b0BleGFtcGxlLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEyJGRtaWl6YmVGTW9mS0lUMlNFWERLM09ESHRBTWRGYVEvYVF4ZEczSjd0RUxULjNZajVTTXpDIiwiaWF0IjoxNzM4NjgzNTQwLCJleHAiOjE3Mzg2ODcxNDB9.5qckZwWaW7AgPya_QR30C-jVXJgcLZFKrwuRzyZ2xZw";
 
   if (!tokenAccess) {
     throw new Error("API key not found");
@@ -29,15 +29,15 @@ const fetchAllUsers = async (): Promise<User[] | null> => {
     if (response.status != 200) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
-
-    return response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error(error);
     return null;
   }
 };
 
-const fetchIdUser = async (id: String): Promise<User | null> => {
+export const fetchIdUser = async (id: String): Promise<User | null> => {
   const url = `${usersUrl}/users/${id}`;
   const tokenAccess = "";
 
@@ -65,7 +65,7 @@ const fetchIdUser = async (id: String): Promise<User | null> => {
   }
 };
 
-const createUser = async (user: CreateUserDto): Promise<User | null> => {
+export const createUser = async (user: CreateUserDto): Promise<User | null> => {
   const url = `${usersUrl}/users`;
 
   try {
@@ -88,7 +88,7 @@ const createUser = async (user: CreateUserDto): Promise<User | null> => {
   }
 };
 
-const updateUser = async (
+export const updateUser = async (
   id: String,
   user: UpdateUserDto
 ): Promise<User | null> => {
@@ -139,7 +139,7 @@ const loginUser = async (
   }
 };
 
-const deleteUser = async (id: String): Promise<deleteUserResponse | null> => {
+export const deleteUser = async (id: String): Promise<deleteUserResponse | null> => {
   const url = `${usersUrl}/users/${id}`;
 
   try {

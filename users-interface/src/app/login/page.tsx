@@ -1,7 +1,8 @@
 "use client";
 
+import { fetchAllUsers } from "@/services/apis/users-api";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
 
 const login = () => {
 
