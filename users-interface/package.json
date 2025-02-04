@@ -16,7 +16,6 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/antd": "^0.12.32",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
