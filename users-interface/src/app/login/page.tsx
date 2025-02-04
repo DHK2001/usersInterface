@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
-import { Button, Form, Input } from "antd";
+import React, { useState, useEffect } from "react";
+import { Button, Form, Input, message } from "antd";
 import { loginUser } from "@/services/apis/users-api";
+import { useRouter } from "next/navigation";
 
 type LoginFormValues = {
   email: string;
@@ -10,25 +11,44 @@ type LoginFormValues = {
 };
 
 const Login: React.FC = () => {
+  const router = useRouter();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [status, setStatus] = useState<{
+    type: "success" | "error" | null;
+    content: string;
+  }>({ type: null, content: "" });
+
+  useEffect(() => {
+    if (status.type) {
+      messageApi.open({
+        type: status.type,
+        content: status.content,
+        duration: 5,
+      });
+      setStatus({ type: null, content: "" });
+    }
+  }, [status, messageApi]);
 
   const onFinish = async (values: LoginFormValues) => {
     const loginR = await loginUser(values);
-    
+
     if (loginR.status === 200) {
-      console.log("Login Successful:", loginR);
+      setStatus({ type: "success", content: "Login Successful" });
+      router.push(`/`);
     } else if (loginR.status === 401) {
-        console.log("Login Failed. Password Incorrect:", loginR);
+      setStatus({ type: "error", content: "Login Failed. Incorrect password" });
     } else {
-        console.log("Login Failed. User not found:", loginR);
+      setStatus({ type: "error", content: "Login Failed. User not found" });
     }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.error("Login Failed:", errorInfo);
+    setStatus({ type: "error", content: errorInfo.errorFields[0].errors[0] });
   };
 
   return (
     <div className="bg-white shadow-md rounded-lg p-8">
+      {contextHolder}
       <h1 className="text-4xl font-bold mb-5 text-center">Login</h1>
       <Form
         name="login"
