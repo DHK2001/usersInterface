@@ -13,7 +13,6 @@ type LoginFormValues = {
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [messageApi, contextHolder] = message.useMessage();
   const [status, setStatus] = useState<{
     type: "success" | "error" | null;
     content: string;
@@ -21,30 +20,25 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (status.type) {
-      messageApi.open({
-        type: status.type,
-        content: status.content,
-        duration: 5,
-      });
+      if (status.type === "success") {
+        message.success(status.content);
+      } else {
+        message.error(status.content);
+      }
       setStatus({ type: null, content: "" });
     }
-  }, [status, messageApi]);
+  }, [status]);
 
   const onFinish = async (values: LoginFormValues) => {
     setLoading(true);
     const loginR = await loginUser(values);
-    
+    setLoading(false);
     if (loginR.status === 200) {
       setStatus({ type: "success", content: "Login Successful" });
-      setTimeout(() => {
-        setLoading(false);
-        router.push(`/`);
-      }, 1000)
+      router.push(`/`);
     } else if (loginR.status === 401) {
-      setLoading(false);
       setStatus({ type: "error", content: "Login Failed. Incorrect password" });
     } else {
-      setLoading(false);
       setStatus({ type: "error", content: "Login Failed. User not found" });
     }
   };
@@ -55,7 +49,6 @@ const Login: React.FC = () => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-8">
-      {contextHolder}
       <h1 className="text-4xl font-bold mb-5 text-center">Login</h1>
       <Spin tip="Loading" size="large" spinning={loading}>
         <Form
