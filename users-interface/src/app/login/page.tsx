@@ -1,38 +1,59 @@
 "use client";
 
-import { fetchAllUsers } from "@/services/apis/users-api";
-import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
+import { Button, Form, Input } from "antd";
 
-const login = () => {
+type LoginFormValues = {
+  email: string;
+  password: string;
+};
+
+const Login: React.FC = () => {
+  const onFinish = (values: LoginFormValues) => {
+    console.log("Login Success:", values);
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.error("Login Failed:", errorInfo);
+  };
 
   return (
-    <>
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h1 className="text-4xl font-bold">Login</h1>
-            <form className="flex flex-col space-y-4">
-            <input
-                type="text"
-                placeholder="Username"
-                className="p-2 border
-                border-gray-300 rounded"
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                className="p-2 border
-                border-gray-300 rounded"
-            />
-            <button
-                type="submit"
-                className="bg-blue-500 text-white p-2 rounded"
-            >
-                Login
-            </button>
-            </form>
-        </div>
-    </>
+    <div className="bg-white shadow-md rounded-lg p-8">
+      <h1 className="text-4xl font-bold mb-5 text-center">Login</h1>
+      <Form
+        name="login"
+        layout="vertical"
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        style={{ width: "100%", maxWidth: 400 }}
+      >
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            { required: true, message: "Please input your email!" },
+            { type: "email", message: "Please enter a valid email!" },
+          ]}
+        >
+          <Input placeholder="Enter your email" />
+        </Form.Item>
+
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password placeholder="Enter your password" />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 
-export default login;
+export default Login;

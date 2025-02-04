@@ -30,10 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className= "flex flex-col min-h-screen bg-gradient-to-r bg-gray-100"
       >
         <Providers>
-          {children}
+        <main className="flex flex-col flex-grow items-center justify-center text-black p-5">
+            {children}
+          </main>
           <footer className="border-t border-gray-400 text-gray-400 py-4 text-center sticky bottom-0">
             <p>© {getActualYear()} User App</p>
           </footer>
