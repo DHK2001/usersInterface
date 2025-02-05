@@ -89,6 +89,9 @@ const Login: React.FC = () => {
             <Button type="primary" htmlType="submit" block>
               Login
             </Button>
+            <p className="text-center pt-2 cursor-pointer hover:text-blue-500 hover:font-bold" onClick={
+              () => router.push("/register")
+            }>or, sign up</p>
           </Form.Item>
         </Form>
       </Spin>
