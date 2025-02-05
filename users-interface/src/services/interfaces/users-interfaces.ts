@@ -18,7 +18,6 @@ export interface loginUserDto {
 
 export interface loginResponseDto {
   accessToken: string;
-  id: string;
   message: string;
 }
 

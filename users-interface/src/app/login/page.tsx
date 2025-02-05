@@ -35,6 +35,7 @@ const Login: React.FC = () => {
       const loginR = await loginUser(values);
       if (loginR.status === 200) {
         setStatus({ type: "success", content: "Login Successful" });
+        console.log(loginR.data?.accessToken);
         router.push(`/`);
       } else if (loginR.status === 401) {
         setStatus({
