@@ -31,15 +31,23 @@ const Login: React.FC = () => {
 
   const onFinish = async (values: LoginFormValues) => {
     setLoading(true);
-    const loginR = await loginUser(values);
-    setLoading(false);
-    if (loginR.status === 200) {
-      setStatus({ type: "success", content: "Login Successful" });
-      router.push(`/`);
-    } else if (loginR.status === 401) {
-      setStatus({ type: "error", content: "Login Failed. Incorrect password" });
-    } else {
-      setStatus({ type: "error", content: "Login Failed. User not found" });
+    try {
+      const loginR = await loginUser(values);
+      if (loginR.status === 200) {
+        setStatus({ type: "success", content: "Login Successful" });
+        router.push(`/`);
+      } else if (loginR.status === 401) {
+        setStatus({
+          type: "error",
+          content: "Login Failed. Incorrect password",
+        });
+      } else {
+        setStatus({ type: "error", content: "Login Failed. User not found" });
+      }
+    } catch (error) {
+      setStatus({ type: "error", content: "An unexpected error occurred" });
+    } finally {
+      setLoading(false);
     }
   };
 
