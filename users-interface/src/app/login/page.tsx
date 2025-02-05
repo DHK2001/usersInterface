@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Form, Input, message, Spin } from "antd";
 import { loginUser } from "@/services/apis/users-api";
 import { useRouter } from "next/navigation";
+import { storeTokenInCookie } from "@/utils/helpers";
 
 type LoginFormValues = {
   email: string;
@@ -35,7 +36,7 @@ const Login: React.FC = () => {
       const loginR = await loginUser(values);
       if (loginR.status === 200) {
         setStatus({ type: "success", content: "Login Successful" });
-        console.log(loginR.data?.accessToken);
+        storeTokenInCookie(loginR.data?.accessToken);
         router.push(`/`);
       } else if (loginR.status === 401) {
         setStatus({
@@ -90,9 +91,12 @@ const Login: React.FC = () => {
             <Button type="primary" htmlType="submit" block>
               Login
             </Button>
-            <p className="text-center pt-2 cursor-pointer hover:text-blue-500 hover:font-bold" onClick={
-              () => router.push("/register")
-            }>or, sign up</p>
+            <p
+              className="text-center pt-2 cursor-pointer hover:text-blue-500 hover:font-bold"
+              onClick={() => router.push("/register")}
+            >
+              or, sign up
+            </p>
           </Form.Item>
         </Form>
       </Spin>
