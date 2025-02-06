@@ -9,15 +9,13 @@ import {
 
 const usersUrl = "http://localhost:8083/v1";
 
-export const fetchAllUsers = async (): Promise<{
+export const fetchAllUsers = async (token: string): Promise<{
   status: number;
   data: User[] | null;
 }> => {
   const url = `${usersUrl}/users`;
-  const tokenAccess =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM4OTQxNjM4LTQ4REYtRUYxMS04OEY4LTYwNDVCRERCQjI2NSIsImVtYWlsIjoicGFibGl0b0BleGFtcGxlLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEyJGRtaWl6YmVGTW9mS0lUMlNFWERLM09ESHRBTWRGYVEvYVF4ZEczSjd0RUxULjNZajVTTXpDIiwiaWF0IjoxNzM4NjgzNTQwLCJleHAiOjE3Mzg2ODcxNDB9.5qckZwWaW7AgPya_QR30C-jVXJgcLZFKrwuRzyZ2xZw";
 
-  if (!tokenAccess) {
+  if (!token) {
     throw new Error("API key not found");
   }
 
@@ -26,7 +24,7 @@ export const fetchAllUsers = async (): Promise<{
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "authorization-token": tokenAccess,
+        "authorization-token": token,
       },
     });
 
@@ -44,12 +42,12 @@ export const fetchAllUsers = async (): Promise<{
 };
 
 export const fetchIdUser = async (
+  token: string,
   id: String
 ): Promise<{ status: number; data: User | null }> => {
   const url = `${usersUrl}/users/${id}`;
-  const tokenAccess = "";
 
-  if (!tokenAccess) {
+  if (!token) {
     throw new Error("API key not found");
   }
 
@@ -58,7 +56,7 @@ export const fetchIdUser = async (
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "authorization-token": tokenAccess,
+        "authorization-token": token,
       },
     });
 
@@ -103,16 +101,22 @@ export const createUser = async (
 };
 
 export const updateUser = async (
+  token: string,
   id: String,
   user: UpdateUserDto
 ): Promise<{ status: number; data: User | null }> => {
   const url = `${usersUrl}/users/${id}`;
+
+  if (!token) {
+    throw new Error("API key not found");
+  }
 
   try {
     const response = await fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "authorization-token": token,
       },
       body: JSON.stringify(user),
     });
@@ -158,15 +162,21 @@ export const loginUser = async (
 };
 
 export const deleteUser = async (
+  token: string,
   id: String
 ): Promise<{ status: number; data: deleteUserResponse | null }> => {
   const url = `${usersUrl}/users/${id}`;
+
+  if (!token) {
+    throw new Error("API key not found");
+  }
 
   try {
     const response = await fetch(url, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        "authorization-token": token,
       },
     });
 

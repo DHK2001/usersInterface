@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Form, Input, message, Spin } from "antd";
 import { loginUser } from "@/services/apis/users-api";
 import { useRouter } from "next/navigation";
-import { getUserIdFromToken } from "@/utils/helpers";
+import { getUserIdFromToken, storeTokenInCookie } from "@/utils/helpers";
 import { useStore } from "@/store";
 
 type LoginFormValues = {
@@ -38,6 +38,7 @@ const Login: React.FC = () => {
       const loginR = await loginUser(values);
       if (loginR.status === 200) {
         setStatus({ type: "success", content: "Login Successful" });
+        storeTokenInCookie(loginR.data?.accessToken ?? "");
         const userId = getUserIdFromToken(loginR.data?.accessToken ?? "");
         setUserId(userId ?? "");
         router.push(`/`);

@@ -32,7 +32,6 @@ export const isTokenValid = (token: string) => {
     const decodedToken = jwtDecode(token) as { exp: number };
 
     if (!decodedToken.exp) {
-      console.error("Token does not contain an expiration date.");
       return false;
     }
 
