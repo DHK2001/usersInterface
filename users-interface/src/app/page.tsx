@@ -58,7 +58,7 @@ export default function Home() {
 
   const fetchUpdateData = async () => {
     await queryClient.invalidateQueries({
-      queryKey: ["userData", token,],
+      queryKey: ["userData", token],
     });
   };
 
@@ -83,6 +83,11 @@ export default function Home() {
       setLoading(false);
     }
   };
+
+  const logOut = () => {
+    storeTokenInCookie("");
+    router.push(`/login`);
+  }
 
   if (loading || isLoading) {
     return (
@@ -135,7 +140,23 @@ export default function Home() {
         >
           Edit
         </Button>
-        <EditModal openModal={open} closeModal={closeModal} userData={userData?.data} token={token} fetchUpdateData={fetchUpdateData} />
+        <EditModal
+          openModal={open}
+          closeModal={closeModal}
+          userData={userData?.data}
+          token={token}
+          fetchUpdateData={fetchUpdateData}
+        />
+      </div>
+      <div className="flex mt-2 w-full">
+        <Button
+          color="danger"
+          variant="solid"
+          className="flex-1"
+          onClick={logOut}
+        >
+          Log Out
+        </Button>
       </div>
     </div>
   );
