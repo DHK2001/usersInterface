@@ -9,7 +9,7 @@ import {
 } from "@/utils/helpers";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteUser, fetchIdUser } from "@/services/apis/users-api";
 import EditModal from "@/components/myProfile/updateData";
 
@@ -19,6 +19,7 @@ export default function Home() {
   const [token, setToken] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const showModal = () => {
     setOpen(true);
@@ -54,6 +55,12 @@ export default function Home() {
       validateSession();
     }
   });
+
+  const fetchUpdateData = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: ["userData", token,],
+    });
+  };
 
   const { data: userData, isLoading } = useQuery({
     queryKey: ["userData", token],
@@ -128,7 +135,7 @@ export default function Home() {
         >
           Edit
         </Button>
-        <EditModal openModal={open} closeModal={closeModal} />
+        <EditModal openModal={open} closeModal={closeModal} userData={userData?.data} token={token} fetchUpdateData={fetchUpdateData} />
       </div>
     </div>
   );
