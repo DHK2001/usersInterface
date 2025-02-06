@@ -11,12 +11,22 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { deleteUser, fetchIdUser } from "@/services/apis/users-api";
+import EditModal from "@/components/myProfile/updateData";
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
   const { userId } = useStore();
   const [token, setToken] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const closeModal = () => {
+    setOpen(false);
+  };
 
   const fetchToken = async () => {
     const token = await getTokenFromCookie();
@@ -110,9 +120,15 @@ export default function Home() {
             Delete
           </Button>
         </Popconfirm>
-        <Button color="primary" variant="solid" className="flex-1">
+        <Button
+          color="primary"
+          variant="solid"
+          className="flex-1"
+          onClick={showModal}
+        >
           Edit
         </Button>
+        <EditModal openModal={open} closeModal={closeModal} />
       </div>
     </div>
   );
