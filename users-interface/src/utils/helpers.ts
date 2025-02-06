@@ -22,3 +22,24 @@ export const getUserIdFromToken = (token: string) => {
     return null;
   }
 };
+
+export const isTokenValid = (token: string) => {
+  if (!token) {
+    return false;
+  }
+
+  try {
+    const decodedToken = jwtDecode(token) as { exp: number };
+
+    if (!decodedToken.exp) {
+      console.error("Token does not contain an expiration date.");
+      return false;
+    }
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decodedToken.exp > currentTime;
+  } catch (error) {
+    console.error("Invalid token", error);
+    return false;
+  }
+};
