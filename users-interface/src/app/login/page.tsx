@@ -4,7 +4,12 @@ import React, { useState, useEffect } from "react";
 import { Button, Form, Input, message, Spin } from "antd";
 import { loginUser } from "@/services/apis/users-api";
 import { useRouter } from "next/navigation";
-import { getUserIdFromToken, storeTokenInCookie } from "@/utils/helpers";
+import {
+  getTokenFromCookie,
+  getUserIdFromToken,
+  isTokenValid,
+  storeTokenInCookie,
+} from "@/utils/helpers";
 import { useStore } from "@/store";
 
 type LoginFormValues = {
@@ -13,13 +18,39 @@ type LoginFormValues = {
 };
 
 const Login: React.FC = () => {
+  const [token, setToken] = useState("");
   const { setUserId } = useStore();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [status, setStatus] = useState<{
     type: "success" | "error" | null;
     content: string;
   }>({ type: null, content: "" });
+
+  const fetchToken = async () => {
+    const token = await getTokenFromCookie();
+    if (token && typeof token === "string") {
+      setToken(token);
+    }
+  };
+
+  const validateSession = () => {
+    if (isTokenValid(token)) {
+      router.push(`/profile`);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchToken();
+    setLoading(false);
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      validateSession();
+    }
+  });
 
   useEffect(() => {
     if (status.type) {
@@ -41,7 +72,7 @@ const Login: React.FC = () => {
         storeTokenInCookie(loginR.data?.accessToken ?? "");
         const userId = getUserIdFromToken(loginR.data?.accessToken ?? "");
         setUserId(userId ?? "");
-        router.push(`/`);
+        router.push(`/profile`);
       } else if (loginR.status === 401) {
         setStatus({
           type: "error",
@@ -95,9 +126,12 @@ const Login: React.FC = () => {
             <Button type="primary" htmlType="submit" block>
               Login
             </Button>
-            <p className="text-center pt-2 cursor-pointer hover:text-blue-500 hover:font-bold" onClick={
-              () => router.push("/register")
-            }>or, sign up</p>
+            <p
+              className="text-center pt-2 cursor-pointer hover:text-blue-500 hover:font-bold"
+              onClick={() => router.push("/register")}
+            >
+              or, sign up
+            </p>
           </Form.Item>
         </Form>
       </Spin>

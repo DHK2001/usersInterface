@@ -5,6 +5,7 @@ import { Button, Form, Input, message, Spin } from "antd";
 import { useRouter } from "next/navigation";
 import { CreateUserDto } from "@/services/interfaces/users-interfaces";
 import { createUser } from "@/services/apis/users-api";
+import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 
 type LoginFormValues = {
   firstName: string;
@@ -15,12 +16,38 @@ type LoginFormValues = {
 };
 
 const Login: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState("");
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [status, setStatus] = useState<{
     type: "success" | "error" | null;
     content: string;
   }>({ type: null, content: "" });
+
+  const fetchToken = async () => {
+    const token = await getTokenFromCookie();
+    if (token && typeof token === "string") {
+      setToken(token);
+    }
+  };
+
+  const validateSession = () => {
+    if (isTokenValid(token)) {
+      router.push(`/profile`);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchToken();
+    setLoading(false);
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      validateSession();
+    }
+  });
 
   useEffect(() => {
     if (status.type) {
