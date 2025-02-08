@@ -33,7 +33,7 @@ const Login: React.FC = () => {
 
   const validateSession = () => {
     if (isTokenValid(token)) {
-      router.push(`/profile`);
+      router.push(`/`);
     }
   };
 

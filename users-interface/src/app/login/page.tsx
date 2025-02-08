@@ -36,7 +36,7 @@ const Login: React.FC = () => {
 
   const validateSession = () => {
     if (isTokenValid(token)) {
-      router.push(`/profile`);
+      router.push(`/`);
     }
   };
 
@@ -72,7 +72,7 @@ const Login: React.FC = () => {
         storeTokenInCookie(loginR.data?.accessToken ?? "");
         const userId = getUserIdFromToken(loginR.data?.accessToken ?? "");
         setUserId(userId ?? "");
-        router.push(`/profile`);
+        router.push(`/`);
       } else if (loginR.status === 401) {
         setStatus({
           type: "error",

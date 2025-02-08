@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/providers/providers";
 import '@ant-design/v5-patch-for-react-19';
+import TopNavbar from "@/components/navBar/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,9 @@ export default function RootLayout({
         className= "flex flex-col min-h-screen bg-gradient-to-r bg-gray-100"
       >
         <Providers>
+          <header>
+          <TopNavbar />
+          </header>
         <main className="flex flex-col flex-grow items-center justify-center text-black p-5">
             {children}
           </main>
