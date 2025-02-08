@@ -31,17 +31,15 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className= "flex flex-col min-h-screen bg-gradient-to-r bg-gray-100"
-      >
+      <body className="h-screen flex flex-col bg-gradient-to-r bg-gray-100">
         <Providers>
-          <header>
-          <TopNavbar />
+          <header className="sticky top-0 z-10 bg-white w-full">
+            <TopNavbar />
           </header>
-        <main className="flex flex-col flex-grow items-center justify-center text-black p-5">
+          <main className="flex-grow overflow-y-auto flex flex-col items-center justify-center text-black p-5 m-5">
             {children}
           </main>
-          <footer className="border-t border-gray-400 text-gray-400 py-4 text-center sticky bottom-0">
+          <footer className="border-t border-gray-400 text-gray-400 py-4 text-center w-full">
             <p>© {getActualYear()} User App</p>
           </footer>
         </Providers>
