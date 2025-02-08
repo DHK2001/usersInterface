@@ -7,9 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
-import {
-  User,
-} from "../interfaces/users-interfaces";
+import { User } from "@/services/interfaces/users-interfaces";
 
 export default function Home() {
   const { userId } = useStore();
