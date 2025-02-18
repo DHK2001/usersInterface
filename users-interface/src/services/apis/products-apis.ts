@@ -61,3 +61,35 @@ export const createProduct = async (
     return { message: "", status: 500, data: null };
   }
 };
+
+export const fetchIdProduct = async (
+  token: string,
+  id: String
+): Promise<{ status: number; data: Product | null }> => {
+  const url = `${productsUrl}/${id}`;
+
+  if (!token) {
+    throw new Error("API key not found");
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization-token": token,
+      },
+    });
+
+    const status = response.status;
+
+    if (!response.ok) {
+      return { status, data: null };
+    }
+
+    const data = await response.json();
+    return { status, data };
+  } catch (error) {
+    return { status: 500, data: null };
+  }
+};

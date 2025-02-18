@@ -99,7 +99,7 @@ export default function Products() {
 
   return (
     <div className="flex flex-col items-center p-4 h-screen">
-      <h1 className="text-2xl font-bold mb-4">Products</h1>
+      <h2 className="text-2xl font-bold mb-4">Products</h2>
       <div className="flex items-center w-full mb-4">
         <Input
           placeholder="Search by name or ID"
@@ -126,7 +126,7 @@ export default function Products() {
             >
               <h3 className="font-bold text-lg">{product.name}</h3>
               <p className="text-sm text-gray-500">{product.description}</p>
-              <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onClick={() => router.push(`/products/${product.id}`)}>
                 View Details
               </button>
             </div>

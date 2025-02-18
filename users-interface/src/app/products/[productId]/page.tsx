@@ -1,14 +1,14 @@
 "use client";
 
-import { fetchIdUser } from "@/services/apis/users-api";
 import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
+import { fetchIdProduct } from "@/services/apis/products-apis";
 
 export default function Home() {
-  const { userId } = useParams();
+  const { productId } = useParams();
   const [token, setToken] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -41,10 +41,10 @@ export default function Home() {
     }
   });
 
-  const { data: userData, isLoading } = useQuery({
-    queryKey: ["userData", token],
+  const { data: productData, isLoading } = useQuery({
+    queryKey: ["productData", token],
     queryFn: async () => {
-      const data = await fetchIdUser(token, userId as string);
+      const data = await fetchIdProduct(token, productId as string);
       return data;
     },
   });
@@ -59,17 +59,21 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
-      <h2 className="text-4xl font-bold text-gray-800 mb-6">{userData?.data?.firstName} {userData?.data?.lastName}</h2>
+      <h2 className="text-4xl font-bold text-gray-800 mb-6">{productData?.data?.name}</h2>
       <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
         <p>
-          <span className="font-semibold">ID:</span> {userData?.data?.id}
+          <span className="font-semibold">ID:</span> {productData?.data?.id}
         </p>
         <p>
-          <span className="font-semibold">Email:</span> {userData?.data?.email}
+          <span className="font-semibold">Description:</span>{" "}
+          {productData?.data?.description}
         </p>
         <p>
-          <span className="font-semibold">Creation Date:</span>{" "}
-          {new Date(userData?.data?.creationDate ?? "").toLocaleDateString()}
+          <span className="font-semibold">Price:</span> {productData?.data?.price}$
+        </p>
+        <p>
+          <span className="font-semibold">Stock:</span>{" "}
+          {new Date(productData?.data?.stock ?? "").toLocaleDateString()}
         </p>
       </div>
     </div>

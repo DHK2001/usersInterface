@@ -84,7 +84,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center p-4 h-screen">
-      <h1 className="text-2xl font-bold mb-4">All Users</h1>
+      <h2 className="text-2xl font-bold mb-4">All Users</h2>
       <Input
         placeholder="Search by name or ID"
         className="mb-4 w-full"

@@ -36,7 +36,7 @@ export default function RootLayout({
           <header className="sticky top-0 z-10 bg-white w-full shadow-md">
             <TopNavbar />
           </header>
-          <main className="flex-grow overflow-y-auto flex flex-col items-center justify-center text-black p-4 sm:p-6 lg:p-8">
+          <main className="flex-grow overflow-y-auto flex flex-col items-center justify-center text-black m-2 p-4 sm:p-6 lg:p-8">
             {children}
           </main>
           <footer className="border-t border-gray-400 text-gray-400 py-4 text-center w-full">
