@@ -6,7 +6,7 @@ import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Spin } from "antd";
+import { Spin, Input } from "antd";
 import { User } from "@/services/interfaces/users-interfaces";
 
 export default function Home() {
@@ -15,6 +15,7 @@ export default function Home() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchToken = async () => {
     const token = await getTokenFromCookie();
@@ -66,6 +67,13 @@ export default function Home() {
     }
   };
 
+  const filteredUsers = users.filter((user) => {
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    const query = searchQuery.toLowerCase();
+    const userId = user.id.toLowerCase();
+    return fullName.includes(query) || userId.includes(query);
+  });
+
   if (loading || isLoading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
@@ -77,9 +85,15 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center p-4 h-screen">
       <h1 className="text-2xl font-bold mb-4">All Users</h1>
+      <Input
+        placeholder="Search by name or ID"
+        className="mb-4 w-full max-w-screen-md"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
-        {users ? (
-          users.map(
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map(
             (user) =>
               user.id !== userId && (
                 <div key={user.id} className="border rounded-lg p-4 shadow-md">
