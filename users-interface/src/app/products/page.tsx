@@ -1,20 +1,18 @@
 "use client";
 
-import { fetchAllUsers } from "@/services/apis/users-api";
-import { useStore } from "@/store";
 import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spin, Input } from "antd";
-import { User } from "@/services/interfaces/users-interfaces";
+import { Product } from "@/services/interfaces/products-interfaces";
+import { fetchAllProducts } from "@/services/apis/products-apis";
 
-export default function Home() {
-  const { userId } = useStore();
+export default function Products() {
   const [token, setToken] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<User[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchToken = async () => {
@@ -44,22 +42,22 @@ export default function Home() {
     }
   }, [token]);
 
-  const { data: usersData, isLoading } = useQuery({
-    queryKey: ["userData", token],
+  const { data: productsData, isLoading } = useQuery({
+    queryKey: ["productsData", token],
     queryFn: async () => {
-      const data = await fetchAllUsers(token);
-      setUsers(data.data || []);
+      const data = await fetchAllProducts(token);
+      setProducts(data.data || []);
       return data;
     },
   });
 
   const dynamicGrid = () => {
-    if (usersData?.data) {
-      if (usersData?.data?.length >= 4) {
+    if (productsData?.data) {
+      if (productsData?.data?.length >= 4) {
         return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-      } else if (usersData?.data?.length === 3) {
+      } else if (productsData?.data?.length === 3) {
         return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
-      } else if (usersData?.data?.length === 2) {
+      } else if (productsData?.data?.length === 2) {
         return "grid-cols-1 sm:grid-cols-2";
       } else {
         return "grid-cols-1";
@@ -67,11 +65,11 @@ export default function Home() {
     }
   };
 
-  const filteredUsers = users.filter((user) => {
-    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+  const filteredProducts = products.filter((product) => {
+    const name = product.name.toLowerCase();
     const query = searchQuery.toLowerCase();
-    const userId = user.id.toLowerCase();
-    return fullName.includes(query) || userId.includes(query);
+    const productId = product.id.toLowerCase();
+    return name.includes(query) || productId.includes(query);
   });
 
   if (loading || isLoading) {
@@ -84,7 +82,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center p-4 h-screen">
-      <h1 className="text-2xl font-bold mb-4">All Users</h1>
+      <h1 className="text-2xl font-bold mb-4">Products</h1>
       <Input
         placeholder="Search by name or ID"
         className="mb-4 w-full max-w-screen-md"
@@ -92,25 +90,21 @@ export default function Home() {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
-        {filteredUsers.length > 0 ? (
-          filteredUsers.map(
-            (user) =>
-              user.id !== userId && (
-                <div key={user.id} className="border rounded-lg p-4 shadow-md">
-                  <h3 className="font-bold text-lg">
-                    {user.firstName} {user.lastName}
-                  </h3>
-                  <button
-                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    onClick={() => router.push(`/users/${user.id}`)}
-                  >
-                    View Details
-                  </button>
-                </div>
-              )
-          )
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div key={product.id} className="border rounded-lg p-4 shadow-md">
+              <h3 className="font-bold text-lg">
+                {product.name}
+              </h3>
+              <button
+                className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                View Details
+              </button>
+            </div>
+          ))
         ) : (
-          <p>No users found</p>
+          <p>No products found</p>
         )}
       </div>
     </div>
