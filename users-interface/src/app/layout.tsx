@@ -33,14 +33,14 @@ export default function RootLayout({
     <html lang="en">
       <body className="h-screen flex flex-col bg-gradient-to-r bg-gray-100">
         <Providers>
-          <header className="sticky top-0 z-10 bg-white w-full">
+          <header className="sticky top-0 z-10 bg-white w-full shadow-md">
             <TopNavbar />
           </header>
-          <main className="flex-grow overflow-y-auto flex flex-col items-center justify-center text-black p-5 m-5">
+          <main className="flex-grow overflow-y-auto flex flex-col items-center justify-center text-black p-4 sm:p-6 lg:p-8">
             {children}
           </main>
           <footer className="border-t border-gray-400 text-gray-400 py-4 text-center w-full">
-            <p>© {getActualYear()} User App</p>
+            <p className="text-sm sm:text-base">© {getActualYear()} User App</p>
           </footer>
         </Providers>
       </body>

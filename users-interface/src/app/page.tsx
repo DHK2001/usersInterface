@@ -87,7 +87,7 @@ export default function Home() {
       <h1 className="text-2xl font-bold mb-4">All Users</h1>
       <Input
         placeholder="Search by name or ID"
-        className="mb-4 w-full max-w-screen-md"
+        className="mb-4 w-full"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
@@ -96,7 +96,7 @@ export default function Home() {
           filteredUsers.map(
             (user) =>
               user.id !== userId && (
-                <div key={user.id} className="border rounded-lg p-4 shadow-md">
+                <div key={user.id} className="border rounded-lg p-4 shadow-md text-center">
                   <h3 className="font-bold text-lg">
                     {user.firstName} {user.lastName}
                   </h3>
