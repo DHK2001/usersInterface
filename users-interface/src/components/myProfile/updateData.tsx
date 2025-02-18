@@ -38,6 +38,16 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
     }
   }, [status]);
 
+  useEffect(() => {
+    if (userData) {
+      form.setFieldsValue({
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+      });
+    }
+  }, [form]);
+
   const onFinish = async (values: UpdateFormValues) => {
     setLoading(true);
     try {
@@ -90,6 +100,7 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
 
   return (
     <Modal
+      forceRender
       title="Edit User Data"
       open={openModal}
       okText="Update"
@@ -105,15 +116,27 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
           onFinishFailed={onFinishFailed}
           style={{ width: "100%", maxWidth: 400 }}
         >
-          <Form.Item label="First Name" name="firstName">
+          <Form.Item label="First Name" name="firstName"
+            rules={[
+              { required: true, message: "Please input your first name!" },
+            ]}
+          >
             <Input placeholder="Enter your first name" />
           </Form.Item>
 
-          <Form.Item label="Last Name" name="lastName">
+          <Form.Item label="Last Name" name="lastName" 
+            rules={[
+              { required: true, message: "Please input your last name!" },
+            ]}
+          >
             <Input placeholder="Enter your last name" />
           </Form.Item>
 
-          <Form.Item label="Email" name="email">
+          <Form.Item label="Email" name="email"
+            rules={[
+              { required: true, message: "Please input your email!" },
+              { type: "email", message: "Please enter a valid email!" },
+            ]}>
             <Input placeholder="Enter your email" />
           </Form.Item>
         </Form>

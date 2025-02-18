@@ -171,7 +171,7 @@ export const deleteUser = async (
 
   try {
     const response = await fetch(url, {
-      method: "DELETE",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "authorization-token": token,
@@ -190,4 +190,3 @@ export const deleteUser = async (
     return { status: 500, data: null };
   }
 };
-
