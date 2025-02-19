@@ -29,6 +29,12 @@ const TopNavbar: React.FC = () => {
           </button>
           <button
             className="hover:text-gray-300"
+            onClick={() => router.push("/orders")}
+          >
+            My Orders
+          </button>
+          <button
+            className="hover:text-gray-300"
             onClick={() => router.push("/profile")}
           >
             My Profile

@@ -3,7 +3,8 @@ import { CreateOrderDto, DeleteOrderResponse, FinalizedOrderResponse, Order, Upd
 const ordersUrl = "http://localhost:8083/v1/orders";
 
 export const fetchAllOrders = async (
-  token: string
+  token: string,
+    id: string
 ): Promise<{
   status: number;
   data: Order[] | null;
@@ -13,7 +14,8 @@ export const fetchAllOrders = async (
   }
 
   try {
-    const response = await fetch(ordersUrl, {
+    const url = `${ordersUrl}/ordersUser/${id}`;
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
