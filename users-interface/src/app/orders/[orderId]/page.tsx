@@ -4,13 +4,14 @@ import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button, message, Popconfirm, Spin } from "antd";
-import { deleteProduct, fetchIdProduct } from "@/services/apis/products-apis";
+import { Button, message, Popconfirm, Spin, Table } from "antd";
+import { fetchIdProduct } from "@/services/apis/products-apis";
 import EditProductModal from "@/components/products/updateProductData";
+import { deleteOrder, fetchIdOrder } from "@/services/apis/orders-apis";
 
-export default function ProductDetails() {
+export default function OrderDetails() {
   const [open, setOpen] = useState(false);
-  const { productId } = useParams();
+  const { orderId } = useParams();
   const [token, setToken] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -24,9 +25,9 @@ export default function ProductDetails() {
     setOpen(false);
   };
 
-  const fetchUpdateProductData = async () => {
+  const fetchUpdateOrderData = async () => {
     await queryClient.invalidateQueries({
-      queryKey: ["productData", token],
+      queryKey: ["orderData", token],
     });
   };
 
@@ -57,26 +58,31 @@ export default function ProductDetails() {
     }
   });
 
-  const { data: productData, isLoading } = useQuery({
-    queryKey: ["productData", token],
+  const { data: orderData, isLoading } = useQuery({
+    queryKey: ["orderData", token],
     queryFn: async () => {
-      const data = await fetchIdProduct(token, productId as string);
+      const data = await fetchIdOrder(token, orderId as string);
       return data;
     },
   });
 
-  const deleteProductAction = async () => {
+  const deleteOrderAction = async () => {
     setLoading(true);
     try {
-      await deleteProduct(token, productId as string);
+      await deleteOrder(token, orderId as string);
       message.success("Product deleted successfully");
       setLoading(false);
-      router.push(`/products`);
+      router.push(`/orders`);
     } catch (error) {
       setLoading(false);
       message.error("An unexpected error occurred");
     }
   };
+
+  const columns = [
+    { title: "Product", dataIndex: "name", key: "name" },
+    { title: "Amount", dataIndex: "amount", key: "amount" },
+  ];
 
   if (loading || isLoading) {
     return (
@@ -89,30 +95,38 @@ export default function ProductDetails() {
   return (
     <div className="m-5">
       <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
-        {productData?.data?.name}
+        Order
       </h2>
       <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
         <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
           <p>
-            <span className="font-semibold">ID:</span> {productData?.data?.id}
+            <span className="font-semibold">Id:</span> {orderData?.data?.id}
           </p>
           <p>
-            <span className="font-semibold">Description:</span>{" "}
-            {productData?.data?.description}
+            <span className="font-semibold">Total Amount:</span>{" "}
+            {orderData?.data?.totalAmount}
           </p>
           <p>
-            <span className="font-semibold">Price:</span>{" "}
-            {productData?.data?.price}$
+            <span className="font-semibold">Finalized:</span>{" "}
+            {orderData?.data?.finalized ? "Yes" : "No"}
           </p>
           <p>
-            <span className="font-semibold">Stock:</span>{" "}
-            {productData?.data?.stock}
+            <span className="font-semibold">Created Date:</span>{" "}
+            {orderData?.data?.orderDate
+              ? new Date(orderData.data.orderDate).toLocaleDateString()
+              : "N/A"}
           </p>
+          <Table
+            dataSource={orderData?.data?.products}
+            columns={columns}
+            rowKey="id"
+            pagination={false}
+          />
           <div className="flex gap-4 mt-8 w-full">
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this task?"
-              onConfirm={deleteProductAction}
+              onConfirm={deleteOrderAction}
               okText="Yes"
               cancelText="No"
             >
@@ -128,13 +142,6 @@ export default function ProductDetails() {
             >
               Edit
             </Button>
-            <EditProductModal
-              openModal={open}
-              closeModal={closeModal}
-              productData={productData?.data}
-              token={token}
-              fetchUpdateProductData={fetchUpdateProductData}
-            />
           </div>
         </div>
       </div>

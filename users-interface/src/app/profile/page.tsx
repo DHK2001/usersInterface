@@ -75,12 +75,12 @@ export default function Home() {
     try {
       await deleteUser(token, userId);
       storeTokenInCookie("");
+      setLoading(false);
       message.success("Profile deleted successfully");
       router.push(`/login`);
     } catch (error) {
-      message.error("An unexpected error occurred");
-    } finally {
       setLoading(false);
+      message.error("An unexpected error occurred");
     }
   };
 
