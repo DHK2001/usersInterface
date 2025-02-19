@@ -87,7 +87,7 @@ export default function Home() {
   const logOut = () => {
     storeTokenInCookie("");
     router.push(`/login`);
-  }
+  };
 
   if (loading || isLoading) {
     return (
@@ -98,66 +98,71 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">My Profile</h1>
-      <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
-        <p>
-          <span className="font-semibold">ID:</span> {userData?.data?.id}
-        </p>
-        <p>
-          <span className="font-semibold">First Name:</span>{" "}
-          {userData?.data?.firstName}
-        </p>
-        <p>
-          <span className="font-semibold">Last Name:</span>{" "}
-          {userData?.data?.lastName}
-        </p>
-        <p>
-          <span className="font-semibold">Email:</span> {userData?.data?.email}
-        </p>
-        <p>
-          <span className="font-semibold">Creation Date:</span>{" "}
-          {new Date(userData?.data?.creationDate ?? "").toLocaleDateString()}
-        </p>
-      </div>
-      <div className="flex gap-4 mt-8 w-full">
-        <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this task?"
-          onConfirm={deleteProfile}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button color="danger" variant="solid" className="flex-1">
-            Delete
+    <>
+      <h2 className="text-3xl font-bold mb-6 border-b-2 border-gray-300 pb-2">
+        My Profile
+      </h2>
+      <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
+        <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
+          <p>
+            <span className="font-semibold">ID:</span> {userData?.data?.id}
+          </p>
+          <p>
+            <span className="font-semibold">First Name:</span>{" "}
+            {userData?.data?.firstName}
+          </p>
+          <p>
+            <span className="font-semibold">Last Name:</span>{" "}
+            {userData?.data?.lastName}
+          </p>
+          <p>
+            <span className="font-semibold">Email:</span>{" "}
+            {userData?.data?.email}
+          </p>
+          <p>
+            <span className="font-semibold">Creation Date:</span>{" "}
+            {new Date(userData?.data?.creationDate ?? "").toLocaleDateString()}
+          </p>
+        </div>
+        <div className="flex gap-4 mt-8 w-full">
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this task?"
+            onConfirm={deleteProfile}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button color="danger" variant="solid" className="flex-1">
+              Delete
+            </Button>
+          </Popconfirm>
+          <Button
+            color="primary"
+            variant="solid"
+            className="flex-1"
+            onClick={showModal}
+          >
+            Edit
           </Button>
-        </Popconfirm>
-        <Button
-          color="primary"
-          variant="solid"
-          className="flex-1"
-          onClick={showModal}
-        >
-          Edit
-        </Button>
-        <EditModal
-          openModal={open}
-          closeModal={closeModal}
-          userData={userData?.data}
-          token={token}
-          fetchUpdateData={fetchUpdateData}
-        />
+          <EditModal
+            openModal={open}
+            closeModal={closeModal}
+            userData={userData?.data}
+            token={token}
+            fetchUpdateData={fetchUpdateData}
+          />
+        </div>
+        <div className="flex mt-2 w-full">
+          <Button
+            color="danger"
+            variant="solid"
+            className="flex-1"
+            onClick={logOut}
+          >
+            Log Out
+          </Button>
+        </div>
       </div>
-      <div className="flex mt-2 w-full">
-        <Button
-          color="danger"
-          variant="solid"
-          className="flex-1"
-          onClick={logOut}
-        >
-          Log Out
-        </Button>
-      </div>
-    </div>
+    </>
   );
 }

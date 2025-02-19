@@ -85,7 +85,7 @@ export default function Orders() {
   };
 
   const filteredOrders = orders.filter((order) => {
-    const name = order.orderDate.toString().toLowerCase();
+    const name = new Date(order.orderDate).toLocaleDateString();
     const query = searchQuery.toLowerCase();
     const orderId = order.id.toLowerCase();
     return name.includes(query) || orderId.includes(query);
@@ -101,40 +101,49 @@ export default function Orders() {
 
   return (
     <div className="flex flex-col items-center p-4 h-screen">
-      <h2 className="text-2xl font-bold mb-4">Products</h2>
-      <div className="flex items-center w-full mb-4">
+      <h2 className="text-3xl font-bold mb-6 border-b-2 border-gray-300 pb-2">
+        My Orders
+      </h2>
+
+      <div className="flex items-center w-full max-w-screen-lg mb-5 space-x-4">
         <Input
-          placeholder="Search by name or ID"
-          className="w-full"
+          placeholder="Search by ID or Date"
+          className="w-full rounded-md"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <Button type="primary" className="ml-2" onClick={showModal}>
-          Add new product
+        <Button type="primary" className="rounded-md" onClick={showModal}>
+          Add Order
         </Button>
       </div>
+
       <CreateProductModal
         openModal={open}
         closeModal={closeModal}
         token={token}
         fetchCreatedProduct={fetchUpdateData}
       />
+
       <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
         {filteredOrders.length > 0 ? (
           filteredOrders.map((order) => (
             <div
               key={order.id}
-              className="border rounded-lg p-4 shadow-md text-center"
+              className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow"
             >
-              <h3 className="font-bold text-lg">{order.id}</h3>
-              <p className="text-sm text-gray-500">{order.orderDate.toString()}</p>
-              <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              <h3 className="font-semibold text-lg text-blue-600">
+                {order.id}
+              </h3>
+              <p className="text-sm text-gray-500 mt-2">
+                {new Date(order.orderDate).toLocaleDateString()}
+              </p>
+              <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
                 View Details
               </button>
             </div>
           ))
         ) : (
-          <p>No products found</p>
+          <p className="text-gray-500">No orders found</p>
         )}
       </div>
     </div>
