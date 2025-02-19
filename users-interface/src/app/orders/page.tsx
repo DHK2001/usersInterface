@@ -9,6 +9,7 @@ import CreateProductModal from "@/components/products/createProduct";
 import { Order } from "@/services/interfaces/orders-interface";
 import { fetchAllOrders } from "@/services/apis/orders-apis";
 import { useStore } from "@/store";
+import CreateOrderModal from "@/components/orders/createProduct";
 
 export default function Orders() {
   const { userId } = useStore();
@@ -28,9 +29,9 @@ export default function Orders() {
     setOpen(false);
   };
 
-  const fetchUpdateData = async () => {
+  const fetchCreatedOrder = async () => {
     await queryClient.invalidateQueries({
-      queryKey: ["productsData", token],
+      queryKey: ["ordersData", token],
     });
   };
 
@@ -117,11 +118,12 @@ export default function Orders() {
         </Button>
       </div>
 
-      <CreateProductModal
+      <CreateOrderModal
         openModal={open}
         closeModal={closeModal}
         token={token}
-        fetchCreatedProduct={fetchUpdateData}
+        userId={userId}
+        fetchCreatedOrder={fetchCreatedOrder}
       />
 
       <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>

@@ -93,48 +93,52 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-8">
-      <h1 className="text-4xl font-bold mb-5 text-center">Login</h1>
-      <Spin tip="Loading" size="large" spinning={loading}>
-        <Form
-          name="login"
-          layout="vertical"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          style={{ width: "100%", maxWidth: 400 }}
-        >
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: "Please input your email!" },
-              { type: "email", message: "Please enter a valid email!" },
-            ]}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg p-8">
+        <h1 className="text-4xl font-bold mb-5 text-center">Login</h1>
+        <Spin tip="Loading" size="large" spinning={loading}>
+          <Form
+            name="login"
+            layout="vertical"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            style={{ width: "100%", maxWidth: 400 }}
           >
-            <Input placeholder="Enter your email" />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Input.Password placeholder="Enter your password" />
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Login
-            </Button>
-            <p
-              className="text-center pt-2 cursor-pointer hover:text-blue-500 hover:font-bold"
-              onClick={() => router.push("/register")}
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: "Please input your email!" },
+                { type: "email", message: "Please enter a valid email!" },
+              ]}
             >
-              or, sign up
-            </p>
-          </Form.Item>
-        </Form>
-      </Spin>
+              <Input placeholder="Enter your email" />
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input.Password placeholder="Enter your password" />
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block>
+                Login
+              </Button>
+              <p
+                className="text-center pt-2 cursor-pointer hover:text-blue-500 hover:font-bold"
+                onClick={() => router.push("/register")}
+              >
+                or, sign up
+              </p>
+            </Form.Item>
+          </Form>
+        </Spin>
+      </div>
     </div>
   );
 };

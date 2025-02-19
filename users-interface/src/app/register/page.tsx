@@ -103,72 +103,76 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-8">
-      <h1 className="text-4xl font-bold mb-5 text-center">Register</h1>
-      <Spin tip="Loading" size="large" spinning={loading}>
-        <Form
-          name="login"
-          layout="vertical"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          style={{ width: "100%", maxWidth: 400 }}
-        >
-          <Form.Item
-            label="First Name"
-            name="firstName"
-            rules={[
-              { required: true, message: "Please input your first name!" },
-            ]}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg p-8">
+        <h1 className="text-4xl font-bold mb-5 text-center">Register</h1>
+        <Spin tip="Loading" size="large" spinning={loading}>
+          <Form
+            name="login"
+            layout="vertical"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            style={{ width: "100%", maxWidth: 400 }}
           >
-            <Input placeholder="Enter your first name" />
-          </Form.Item>
+            <Form.Item
+              label="First Name"
+              name="firstName"
+              rules={[
+                { required: true, message: "Please input your first name!" },
+              ]}
+            >
+              <Input placeholder="Enter your first name" />
+            </Form.Item>
 
-          <Form.Item
-            label="Last Name"
-            name="lastName"
-            rules={[
-              { required: true, message: "Please input your last name!" },
-            ]}
-          >
-            <Input placeholder="Enter your last name" />
-          </Form.Item>
+            <Form.Item
+              label="Last Name"
+              name="lastName"
+              rules={[
+                { required: true, message: "Please input your last name!" },
+              ]}
+            >
+              <Input placeholder="Enter your last name" />
+            </Form.Item>
 
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: "Please input your email!" },
-              { type: "email", message: "Please enter a valid email!" },
-            ]}
-          >
-            <Input placeholder="Enter your email" />
-          </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: "Please input your email!" },
+                { type: "email", message: "Please enter a valid email!" },
+              ]}
+            >
+              <Input placeholder="Enter your email" />
+            </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Input.Password placeholder="Enter your password" />
-          </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input.Password placeholder="Enter your password" />
+            </Form.Item>
 
-          <Form.Item
-            label="Confirm Password"
-            name="confirmPassword"
-            rules={[
-              { required: true, message: "Please confirm your password!" },
-            ]}
-          >
-            <Input.Password placeholder="Confirm your password" />
-          </Form.Item>
+            <Form.Item
+              label="Confirm Password"
+              name="confirmPassword"
+              rules={[
+                { required: true, message: "Please confirm your password!" },
+              ]}
+            >
+              <Input.Password placeholder="Confirm your password" />
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Sign Up
-            </Button>
-          </Form.Item>
-        </Form>
-      </Spin>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block>
+                Sign Up
+              </Button>
+            </Form.Item>
+          </Form>
+        </Spin>
+      </div>
     </div>
   );
 };
