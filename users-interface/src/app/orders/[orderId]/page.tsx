@@ -7,7 +7,11 @@ import { useEffect, useState } from "react";
 import { Button, message, Popconfirm, Spin, Table } from "antd";
 import { fetchIdProduct } from "@/services/apis/products-apis";
 import EditProductModal from "@/components/products/updateProductData";
-import { deleteOrder, fetchIdOrder } from "@/services/apis/orders-apis";
+import {
+  deleteOrder,
+  fetchIdOrder,
+  finalizeOrder,
+} from "@/services/apis/orders-apis";
 
 export default function OrderDetails() {
   const [open, setOpen] = useState(false);
@@ -66,6 +70,19 @@ export default function OrderDetails() {
     },
   });
 
+  const finishOrderAction = async () => {
+    setLoading(true);
+    try {
+      await finalizeOrder(token, orderId as string);
+      message.success("Order finished successfully");
+      fetchUpdateOrderData();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      message.error("An unexpected error occurred");
+    }
+  };
+
   const deleteOrderAction = async () => {
     setLoading(true);
     try {
@@ -122,27 +139,64 @@ export default function OrderDetails() {
             rowKey="id"
             pagination={false}
           />
-          <div className="flex gap-4 mt-8 w-full">
-            <Popconfirm
-              title="Delete the task"
-              description="Are you sure to delete this task?"
-              onConfirm={deleteOrderAction}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button color="danger" variant="solid" className="flex-1">
-                Delete
+          {!orderData?.data?.finalized ? (
+            <>
+              <div className="flex gap-4 mt-8 w-full">
+                <Popconfirm
+                  title="Delete the task"
+                  description="Are you sure to finish this order?"
+                  onConfirm={finishOrderAction}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button color="primary" variant="solid" className="flex-1">
+                    Finish
+                  </Button>
+                </Popconfirm>
+                <Button
+                  color="primary"
+                  variant="solid"
+                  className="flex-1"
+                  onClick={showModal}
+                >
+                  Edit
+                </Button>
+              </div>
+              <Popconfirm
+                title="Delete the task"
+                description="Are you sure to delete this order?"
+                onConfirm={deleteOrderAction}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button color="danger" variant="solid" className="flex-1">
+                  Delete
+                </Button>
+              </Popconfirm>
+            </>
+          ) : (
+            <div className="flex gap-4 mt-8 w-full">
+              <Popconfirm
+                title="Delete the task"
+                description="Are you sure to delete this order?"
+                onConfirm={deleteOrderAction}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button color="danger" variant="solid" className="flex-1">
+                  Delete
+                </Button>
+              </Popconfirm>
+              <Button
+                color="primary"
+                variant="solid"
+                className="flex-1"
+                onClick={showModal}
+              >
+                Edit
               </Button>
-            </Popconfirm>
-            <Button
-              color="primary"
-              variant="solid"
-              className="flex-1"
-              onClick={showModal}
-            >
-              Edit
-            </Button>
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
