@@ -31,8 +31,8 @@ export interface FinalizedOrderResponse {
 
 export interface Order {
   id: string;
-  user: User;
-  products: Product[];
+  userId: string;
+  products: { id: string; name: string; amount: number }[];
   totalAmount: number;
   orderDate: Date;
   finalized: boolean;

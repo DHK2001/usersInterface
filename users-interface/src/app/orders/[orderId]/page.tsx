@@ -12,6 +12,7 @@ import {
   fetchIdOrder,
   finalizeOrder,
 } from "@/services/apis/orders-apis";
+import UpdateOrderModal from "@/components/orders/updateOrder";
 
 export default function OrderDetails() {
   const [open, setOpen] = useState(false);
@@ -154,6 +155,7 @@ export default function OrderDetails() {
                   </Button>
                 </Popconfirm>
                 <Button
+                  disabled={orderData?.data?.finalized}
                   color="primary"
                   variant="solid"
                   className="flex-1"
@@ -161,6 +163,14 @@ export default function OrderDetails() {
                 >
                   Edit
                 </Button>
+                <UpdateOrderModal
+                  openModal={open}
+                  closeModal={closeModal}
+                  orderData={orderData?.data}
+                  token={token}
+                  fetchUpdateOrder={fetchUpdateOrderData}
+                  orderId={orderId as string}
+                />
               </div>
               <Popconfirm
                 title="Delete the task"
@@ -188,6 +198,7 @@ export default function OrderDetails() {
                 </Button>
               </Popconfirm>
               <Button
+                disabled={orderData?.data?.finalized}
                 color="primary"
                 variant="solid"
                 className="flex-1"
@@ -195,6 +206,14 @@ export default function OrderDetails() {
               >
                 Edit
               </Button>
+              <UpdateOrderModal
+                openModal={open}
+                closeModal={closeModal}
+                orderData={orderData?.data}
+                token={token}
+                fetchUpdateOrder={fetchUpdateOrderData}
+                orderId={orderId as string}
+              />
             </div>
           )}
         </div>

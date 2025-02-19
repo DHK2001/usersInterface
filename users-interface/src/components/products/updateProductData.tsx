@@ -1,11 +1,9 @@
 "use client";
 
 import { updateProduct } from "@/services/apis/products-apis";
-import { updateUser } from "@/services/apis/users-api";
 import { Product, UpdateProductDto } from "@/services/interfaces/products-interfaces";
-import { UpdateUserDto, User } from "@/services/interfaces/users-interfaces";
 import { Form, Input, message, Modal, Spin } from "antd";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 type UpdateFormValues = {
   name: string;

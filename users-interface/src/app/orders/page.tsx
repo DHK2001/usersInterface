@@ -9,7 +9,7 @@ import CreateProductModal from "@/components/products/createProduct";
 import { Order } from "@/services/interfaces/orders-interface";
 import { fetchAllOrders } from "@/services/apis/orders-apis";
 import { useStore } from "@/store";
-import CreateOrderModal from "@/components/orders/createProduct";
+import CreateOrderModal from "@/components/orders/createOrder";
 
 export default function Orders() {
   const { userId } = useStore();
@@ -136,6 +136,9 @@ export default function Orders() {
               <h3 className="font-semibold text-lg text-blue-600">
                 {order.id}
               </h3>
+              <p className="text-sm text-gray-500 mt-2">
+                {order.finalized ? "Finalized" : "Active"}
+              </p>
               <p className="text-sm text-gray-500 mt-2">
                 {new Date(order.orderDate).toLocaleDateString()}
               </p>
