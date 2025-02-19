@@ -100,8 +100,8 @@ export default function Orders() {
   }
 
   return (
-    <div className="flex flex-col items-center p-4 h-screen">
-      <h2 className="text-3xl font-bold mb-6 border-b-2 border-gray-300 pb-2">
+    <div className="flex flex-col items-center m-5">
+      <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 w-full pb-2 text-center">
         My Orders
       </h2>
 
@@ -137,7 +137,10 @@ export default function Orders() {
               <p className="text-sm text-gray-500 mt-2">
                 {new Date(order.orderDate).toLocaleDateString()}
               </p>
-              <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+              <button
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                onClick={() => router.push(`/orders/${order.id}`)}
+              >
                 View Details
               </button>
             </div>

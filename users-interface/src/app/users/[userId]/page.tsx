@@ -58,19 +58,32 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
-      <h2 className="text-4xl font-bold text-gray-800 mb-6">{userData?.data?.firstName} {userData?.data?.lastName}</h2>
-      <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
-        <p>
-          <span className="font-semibold">ID:</span> {userData?.data?.id}
-        </p>
-        <p>
-          <span className="font-semibold">Email:</span> {userData?.data?.email}
-        </p>
-        <p>
-          <span className="font-semibold">Creation Date:</span>{" "}
-          {new Date(userData?.data?.creationDate ?? "").toLocaleDateString()}
-        </p>
+    <div className="m-5">
+      <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
+        User Profile
+      </h2>
+      <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
+        <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
+          <p>
+            <span className="font-semibold">ID:</span> {userData?.data?.id}
+          </p>
+          <p>
+            <span className="font-semibold">First Name:</span>{" "}
+            {userData?.data?.firstName}
+          </p>
+          <p>
+            <span className="font-semibold">Last Name:</span>{" "}
+            {userData?.data?.lastName}
+          </p>
+          <p>
+            <span className="font-semibold">Email:</span>{" "}
+            {userData?.data?.email}
+          </p>
+          <p>
+            <span className="font-semibold">Creation Date:</span>{" "}
+            {new Date(userData?.data?.creationDate ?? "").toLocaleDateString()}
+          </p>
+        </div>
       </div>
     </div>
   );

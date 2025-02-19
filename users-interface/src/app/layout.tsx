@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/providers/providers";
-import '@ant-design/v5-patch-for-react-19';
+import "@ant-design/v5-patch-for-react-19";
 import TopNavbar from "@/components/navBar/navbar";
 
 const geistSans = Geist({
@@ -36,7 +36,7 @@ export default function RootLayout({
           <header className="sticky top-0 z-10 bg-white w-full shadow-md">
             <TopNavbar />
           </header>
-          <main className="flex-grow overflow-y-auto flex flex-col items-center justify-center text-black m-2 p-4 sm:p-6 lg:p-8">
+          <main className="flex-grow overflow-y-auto flex flex-col items-center text-black">
             {children}
           </main>
           <footer className="border-t border-gray-400 text-gray-400 py-4 text-center w-full">

@@ -98,8 +98,8 @@ export default function Home() {
   }
 
   return (
-    <>
-      <h2 className="text-3xl font-bold mb-6 border-b-2 border-gray-300 pb-2">
+    <div className="m-5">
+      <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
         My Profile
       </h2>
       <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
@@ -163,6 +163,6 @@ export default function Home() {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

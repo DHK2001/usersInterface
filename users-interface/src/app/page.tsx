@@ -83,8 +83,10 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center p-4 h-screen">
-      <h2 className="text-3xl font-bold mb-6 border-b-2 border-gray-300 pb-2">All Users</h2>
+    <div className="flex flex-col items-center p-4">
+      <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 w-full pb-2 text-center">
+        All Users
+      </h2>
       <Input
         placeholder="Search by name or ID"
         className="w-full rounded-md mb-5"
@@ -96,7 +98,10 @@ export default function Home() {
           filteredUsers.map(
             (user) =>
               user.id !== userId && (
-                <div key={user.id} className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow">
+                <div
+                  key={user.id}
+                  className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow"
+                >
                   <h3 className="font-semibold text-lg text-blue-600">
                     {user.firstName} {user.lastName}
                   </h3>
