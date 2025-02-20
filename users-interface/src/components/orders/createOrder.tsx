@@ -4,7 +4,7 @@ import { createOrder } from "@/services/apis/orders-apis";
 import { fetchAllProducts } from "@/services/apis/products-apis";
 import { CreateOrderDto } from "@/services/interfaces/orders-interface";
 import { Product } from "@/services/interfaces/products-interfaces";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Form, InputNumber, Select, Table, Button, message, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
 
@@ -32,6 +32,8 @@ function CreateOrderModal({
     type: "success" | "error" | null;
     content: string;
   }>({ type: null, content: "" });
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (status.type) {
@@ -52,6 +54,12 @@ function CreateOrderModal({
       return data;
     },
   });
+
+  const fetchUpdateProductData = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: ["productsData", token],
+    });
+  };
 
   const addProduct = (id: string, amount: number) => {
     const product = products.find((p) => p.id === id);
@@ -105,7 +113,9 @@ function CreateOrderModal({
       if (response.status === 201) {
         setStatus({ type: "success", content: "Order created successfully" });
         fetchCreatedOrder();
+        fetchUpdateProductData();
         setSelectedProducts([]);
+        setSelectedProduct(null);
         closeModal();
       } else {
         setStatus({ type: "error", content: "Order creation failed" });
@@ -149,7 +159,11 @@ function CreateOrderModal({
       open={openModal}
       okText="Create"
       onOk={onFinish}
-      onCancel={closeModal}
+      onCancel={() => {
+        setSelectedProduct(null);
+        setSelectedProducts([]);
+        closeModal();
+      }}
       confirmLoading={loading}
     >
       <Spin tip="Loading" size="large" spinning={loading || isLoading}>
@@ -162,7 +176,13 @@ function CreateOrderModal({
                 value: product.id,
                 label: `${product.name} (Stock: ${product.stock})`,
               }))}
-              onChange={(value) => addProduct(value, 1)}
+              value={selectedProduct}
+              onChange={(value) => {
+                setSelectedProduct(value);
+                if (value) {
+                  addProduct(value, 1);
+                }
+              }}
             />
           </Form.Item>
 

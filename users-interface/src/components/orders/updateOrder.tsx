@@ -4,7 +4,7 @@ import { updateOrder } from "@/services/apis/orders-apis";
 import { fetchAllProducts } from "@/services/apis/products-apis";
 import { UpdateOrderDto, Order } from "@/services/interfaces/orders-interface";
 import { Product } from "@/services/interfaces/products-interfaces";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Form,
   InputNumber,
@@ -43,6 +43,8 @@ function UpdateOrderModal({
     type: "success" | "error" | null;
     content: string;
   }>({ type: null, content: "" });
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (status.type) {
@@ -77,6 +79,12 @@ function UpdateOrderModal({
     },
   });
 
+  const fetchUpdateProductData = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: ["productsData", token],
+    });
+  };
+
   const addProduct = (id: string, amount: number) => {
     const product = products.find((p) => p.id === id);
     if (!product) return;
@@ -96,14 +104,6 @@ function UpdateOrderModal({
         { id: product.id, name: product.name, amount, stock: product.stock },
       ]);
     }
-  };
-
-  const updateProductAmount = (id: string, newAmount: number) => {
-    setSelectedProducts((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, amount: Math.min(newAmount, p.stock) } : p
-      )
-    );
   };
 
   const removeProduct = (id: string) => {
@@ -142,6 +142,8 @@ function UpdateOrderModal({
       if (response.status === 200) {
         setStatus({ type: "success", content: "Order updated successfully." });
         fetchUpdateOrder();
+        fetchUpdateProductData();
+        setSelectedProduct(null);
         closeModal();
       } else {
         setStatus({ type: "error", content: "Order update failed." });
@@ -153,6 +155,12 @@ function UpdateOrderModal({
     }
   };
 
+  const updateProductAmountLimit = (id: string, newAmount: number) => {
+    setSelectedProducts((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, amount: newAmount } : p))
+    );
+  };
+
   const columns = [
     { title: "Product", dataIndex: "name", key: "name" },
     {
@@ -162,14 +170,22 @@ function UpdateOrderModal({
       render: (
         _: any,
         record: { id: string; amount: number; stock: number }
-      ) => (
-        <InputNumber
-          min={1}
-          max={record.stock}
-          value={record.amount}
-          onChange={(value) => updateProductAmount(record.id, value || 1)}
-        />
-      ),
+      ) => {
+        const initialAmount =
+          orderData?.products.find((p) => p.id === record.id)?.amount || 0;
+        const dynamicLimit = record.stock + initialAmount;
+
+        return (
+          <InputNumber
+            min={1}
+            max={dynamicLimit}
+            value={record.amount}
+            onChange={(value) =>
+              updateProductAmountLimit(record.id, value || 1)
+            }
+          />
+        );
+      },
     },
     {
       title: "Action",
@@ -189,7 +205,10 @@ function UpdateOrderModal({
       open={openModal}
       okText="Update"
       onOk={onFinish}
-      onCancel={closeModal}
+      onCancel={() => {
+        setSelectedProduct(null);
+        closeModal();
+      }}
       confirmLoading={loading}
     >
       <Spin tip="Loading" size="large" spinning={loading || isLoading}>
@@ -202,7 +221,15 @@ function UpdateOrderModal({
                 value: product.id,
                 label: `${product.name} (Stock: ${product.stock})`,
               }))}
-              onChange={(value) => addProduct(value, 1)}
+              value={selectedProduct}
+              onChange={(value) => {
+                setSelectedProduct(value);
+                const product = products.find((p) => p.id === value);
+                if (product) {
+                  addProduct(product.id, 1);
+                }
+              }}
+              optionLabelProp="label"
             />
           </Form.Item>
 
