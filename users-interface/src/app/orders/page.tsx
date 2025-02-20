@@ -4,12 +4,11 @@ import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Spin, Input, Button } from "antd";
-import CreateProductModal from "@/components/products/createProduct";
+import { Spin, Input, Button, Select } from "antd";
+import CreateOrderModal from "@/components/orders/createOrder";
 import { Order } from "@/services/interfaces/orders-interface";
 import { fetchAllOrders } from "@/services/apis/orders-apis";
 import { useStore } from "@/store";
-import CreateOrderModal from "@/components/orders/createOrder";
 
 export default function Orders() {
   const { userId } = useStore();
@@ -19,6 +18,7 @@ export default function Orders() {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all"); // Nuevo estado para el filtro
   const queryClient = useQueryClient();
 
   const showModal = () => {
@@ -89,7 +89,14 @@ export default function Orders() {
     const name = new Date(order.orderDate).toLocaleDateString();
     const query = searchQuery.toLowerCase();
     const orderId = order.id.toLowerCase();
-    return name.includes(query) || orderId.includes(query);
+    const matchesSearch = name.includes(query) || orderId.includes(query);
+
+    const matchesFilter =
+      filterStatus === "all" ||
+      (filterStatus === "active" && !order.finalized) ||
+      (filterStatus === "finalized" && order.finalized);
+
+    return matchesSearch && matchesFilter;
   });
 
   if (!loading && !isLoading) {
@@ -105,6 +112,16 @@ export default function Orders() {
             className="w-full rounded-md"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Select
+            className="w-40"
+            value={filterStatus}
+            onChange={setFilterStatus}
+            options={[
+              { value: "all", label: "All" },
+              { value: "active", label: "Active" },
+              { value: "finalized", label: "Finalized" },
+            ]}
           />
           <Button type="primary" className="rounded-md" onClick={showModal}>
             Add Order
