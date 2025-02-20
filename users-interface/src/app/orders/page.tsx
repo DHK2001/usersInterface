@@ -92,68 +92,68 @@ export default function Orders() {
     return name.includes(query) || orderId.includes(query);
   });
 
-  if (loading || isLoading) {
+  if (!loading && !isLoading) {
+    return (
+      <div className="flex flex-col items-center m-5">
+        <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 w-full pb-2 text-center">
+          My Orders
+        </h2>
+
+        <div className="flex items-center w-full max-w-screen-lg mb-5 space-x-4">
+          <Input
+            placeholder="Search by ID or Date"
+            className="w-full rounded-md"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button type="primary" className="rounded-md" onClick={showModal}>
+            Add Order
+          </Button>
+        </div>
+
+        <CreateOrderModal
+          openModal={open}
+          closeModal={closeModal}
+          token={token}
+          userId={userId}
+          fetchCreatedOrder={fetchCreatedOrder}
+        />
+
+        <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
+          {filteredOrders.length > 0 ? (
+            filteredOrders.map((order) => (
+              <div
+                key={order.id}
+                className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow"
+              >
+                <h3 className="font-semibold text-lg text-blue-600">
+                  {order.id}
+                </h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  {order.finalized ? "Finalized" : "Active"}
+                </p>
+                <p className="text-sm text-gray-500 mt-2">
+                  {new Date(order.orderDate).toLocaleDateString()}
+                </p>
+                <button
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                  onClick={() => router.push(`/orders/${order.id}`)}
+                >
+                  View Details
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">No orders found</p>
+          )}
+        </div>
+      </div>
+    );
+  } else {
     return (
       <div className="flex items-center justify-center w-full h-screen">
         <Spin size="large" />
       </div>
     );
   }
-
-  return (
-    <div className="flex flex-col items-center m-5">
-      <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 w-full pb-2 text-center">
-        My Orders
-      </h2>
-
-      <div className="flex items-center w-full max-w-screen-lg mb-5 space-x-4">
-        <Input
-          placeholder="Search by ID or Date"
-          className="w-full rounded-md"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <Button type="primary" className="rounded-md" onClick={showModal}>
-          Add Order
-        </Button>
-      </div>
-
-      <CreateOrderModal
-        openModal={open}
-        closeModal={closeModal}
-        token={token}
-        userId={userId}
-        fetchCreatedOrder={fetchCreatedOrder}
-      />
-
-      <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
-        {filteredOrders.length > 0 ? (
-          filteredOrders.map((order) => (
-            <div
-              key={order.id}
-              className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow"
-            >
-              <h3 className="font-semibold text-lg text-blue-600">
-                {order.id}
-              </h3>
-              <p className="text-sm text-gray-500 mt-2">
-                {order.finalized ? "Finalized" : "Active"}
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                {new Date(order.orderDate).toLocaleDateString()}
-              </p>
-              <button
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-                onClick={() => router.push(`/orders/${order.id}`)}
-              >
-                View Details
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No orders found</p>
-        )}
-      </div>
-    </div>
-  );
 }

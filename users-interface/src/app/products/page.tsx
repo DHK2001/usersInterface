@@ -89,61 +89,61 @@ export default function Products() {
     return name.includes(query) || productId.includes(query);
   });
 
-  if (loading || isLoading) {
+  if (!loading && !isLoading) {
+    return (
+      <div className="flex flex-col items-center p-4 mb-2">
+        <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 w-full pb-2 text-center">
+          Products
+        </h2>
+        <div className="flex items-center w-full max-w-screen-lg mb-5 space-x-4">
+          <Input
+            placeholder="Search by name or ID"
+            className="w-full rounded-md"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button type="primary" className="rounded-md" onClick={showModal}>
+            Add Product
+          </Button>
+        </div>
+        <CreateProductModal
+          openModal={open}
+          closeModal={closeModal}
+          token={token}
+          fetchCreatedProduct={fetchUpdateData}
+        />
+        <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow"
+              >
+                <h3 className="font-semibold text-lg text-blue-600">
+                  {product.name}
+                </h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  {product.description}
+                </p>
+                <button
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                  onClick={() => router.push(`/products/${product.id}`)}
+                >
+                  View Details
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">No products found</p>
+          )}
+        </div>
+      </div>
+    );
+  } else {
     return (
       <div className="flex items-center justify-center w-full h-screen">
         <Spin size="large" />
       </div>
     );
   }
-
-  return (
-    <div className="flex flex-col items-center p-4 mb-2">
-      <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 w-full pb-2 text-center">
-        Products
-      </h2>
-      <div className="flex items-center w-full max-w-screen-lg mb-5 space-x-4">
-        <Input
-          placeholder="Search by name or ID"
-          className="w-full rounded-md"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <Button type="primary" className="rounded-md" onClick={showModal}>
-          Add Product
-        </Button>
-      </div>
-      <CreateProductModal
-        openModal={open}
-        closeModal={closeModal}
-        token={token}
-        fetchCreatedProduct={fetchUpdateData}
-      />
-      <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow"
-            >
-              <h3 className="font-semibold text-lg text-blue-600">
-                {product.name}
-              </h3>
-              <p className="text-sm text-gray-500 mt-2">
-                {product.description}
-              </p>
-              <button
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-                onClick={() => router.push(`/products/${product.id}`)}
-              >
-                View Details
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No products found</p>
-        )}
-      </div>
-    </div>
-  );
 }

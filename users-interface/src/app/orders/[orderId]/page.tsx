@@ -102,56 +102,92 @@ export default function OrderDetails() {
     { title: "Amount", dataIndex: "amount", key: "amount" },
   ];
 
-  if (loading || isLoading) {
+  if (!loading && !isLoading) {
     return (
-      <div className="flex items-center justify-center w-full h-screen">
-        <Spin size="large" />
-      </div>
-    );
-  }
-
-  return (
-    <div className="m-5">
-      <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
-        Order
-      </h2>
-      <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
-        <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
-          <p>
-            <span className="font-semibold">Id:</span> {orderData?.data?.id}
-          </p>
-          <p>
-            <span className="font-semibold">Total Amount:</span>{" "}
-            {orderData?.data?.totalAmount}
-          </p>
-          <p>
-            <span className="font-semibold">Finalized:</span>{" "}
-            {orderData?.data?.finalized ? "Yes" : "No"}
-          </p>
-          <p>
-            <span className="font-semibold">Created Date:</span>{" "}
-            {orderData?.data?.orderDate
-              ? new Date(orderData.data.orderDate).toLocaleDateString()
-              : "N/A"}
-          </p>
-          <Table
-            dataSource={orderData?.data?.products}
-            columns={columns}
-            rowKey="id"
-            pagination={false}
-          />
-          {!orderData?.data?.finalized ? (
-            <>
-              <div className="flex gap-4 mt-8 w-full">
+      <div className="m-5">
+        <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
+          Order
+        </h2>
+        <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
+          <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
+            <p>
+              <span className="font-semibold">Id:</span> {orderData?.data?.id}
+            </p>
+            <p>
+              <span className="font-semibold">Total Amount:</span>{" "}
+              {orderData?.data?.totalAmount}
+            </p>
+            <p>
+              <span className="font-semibold">Finalized:</span>{" "}
+              {orderData?.data?.finalized ? "Yes" : "No"}
+            </p>
+            <p>
+              <span className="font-semibold">Created Date:</span>{" "}
+              {orderData?.data?.orderDate
+                ? new Date(orderData.data.orderDate).toLocaleDateString()
+                : "N/A"}
+            </p>
+            <Table
+              dataSource={orderData?.data?.products}
+              columns={columns}
+              rowKey="id"
+              pagination={false}
+            />
+            {!orderData?.data?.finalized ? (
+              <>
+                <div className="flex gap-4 mt-8 w-full">
+                  <Popconfirm
+                    title="Delete the task"
+                    description="Are you sure to finish this order?"
+                    onConfirm={finishOrderAction}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button color="primary" variant="solid" className="flex-1">
+                      Finish
+                    </Button>
+                  </Popconfirm>
+                  <Button
+                    disabled={orderData?.data?.finalized}
+                    color="primary"
+                    variant="solid"
+                    className="flex-1"
+                    onClick={showModal}
+                  >
+                    Edit
+                  </Button>
+                  <UpdateOrderModal
+                    openModal={open}
+                    closeModal={closeModal}
+                    orderData={orderData?.data}
+                    token={token}
+                    fetchUpdateOrder={fetchUpdateOrderData}
+                    orderId={orderId as string}
+                  />
+                </div>
                 <Popconfirm
                   title="Delete the task"
-                  description="Are you sure to finish this order?"
-                  onConfirm={finishOrderAction}
+                  description="Are you sure to delete this order?"
+                  onConfirm={deleteOrderAction}
                   okText="Yes"
                   cancelText="No"
                 >
-                  <Button color="primary" variant="solid" className="flex-1">
-                    Finish
+                  <Button color="danger" variant="solid" className="flex-1">
+                    Delete
+                  </Button>
+                </Popconfirm>
+              </>
+            ) : (
+              <div className="flex gap-4 mt-8 w-full">
+                <Popconfirm
+                  title="Delete the task"
+                  description="Are you sure to delete this order?"
+                  onConfirm={deleteOrderAction}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button color="danger" variant="solid" className="flex-1">
+                    Delete
                   </Button>
                 </Popconfirm>
                 <Button
@@ -172,52 +208,16 @@ export default function OrderDetails() {
                   orderId={orderId as string}
                 />
               </div>
-              <Popconfirm
-                title="Delete the task"
-                description="Are you sure to delete this order?"
-                onConfirm={deleteOrderAction}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button color="danger" variant="solid" className="flex-1">
-                  Delete
-                </Button>
-              </Popconfirm>
-            </>
-          ) : (
-            <div className="flex gap-4 mt-8 w-full">
-              <Popconfirm
-                title="Delete the task"
-                description="Are you sure to delete this order?"
-                onConfirm={deleteOrderAction}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button color="danger" variant="solid" className="flex-1">
-                  Delete
-                </Button>
-              </Popconfirm>
-              <Button
-                disabled={orderData?.data?.finalized}
-                color="primary"
-                variant="solid"
-                className="flex-1"
-                onClick={showModal}
-              >
-                Edit
-              </Button>
-              <UpdateOrderModal
-                openModal={open}
-                closeModal={closeModal}
-                orderData={orderData?.data}
-                token={token}
-                fetchUpdateOrder={fetchUpdateOrderData}
-                orderId={orderId as string}
-              />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="flex items-center justify-center w-full h-screen">
+        <Spin size="large" />
+      </div>
+    );
+  }
 }

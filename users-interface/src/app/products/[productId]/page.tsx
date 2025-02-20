@@ -78,66 +78,66 @@ export default function ProductDetails() {
     }
   };
 
-  if (loading || isLoading) {
+  if (!loading && !isLoading) {
+    return (
+      <div className="m-5">
+        <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
+          {productData?.data?.name}
+        </h2>
+        <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
+          <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
+            <p>
+              <span className="font-semibold">ID:</span> {productData?.data?.id}
+            </p>
+            <p>
+              <span className="font-semibold">Description:</span>{" "}
+              {productData?.data?.description}
+            </p>
+            <p>
+              <span className="font-semibold">Price:</span>{" "}
+              {productData?.data?.price}$
+            </p>
+            <p>
+              <span className="font-semibold">Stock:</span>{" "}
+              {productData?.data?.stock}
+            </p>
+            <div className="flex gap-4 mt-8 w-full">
+              <Popconfirm
+                title="Delete the task"
+                description="Are you sure to delete this task?"
+                onConfirm={deleteProductAction}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button color="danger" variant="solid" className="flex-1">
+                  Delete
+                </Button>
+              </Popconfirm>
+              <Button
+                color="primary"
+                variant="solid"
+                className="flex-1"
+                onClick={showModal}
+              >
+                Edit
+              </Button>
+              <EditProductModal
+                openModal={open}
+                closeModal={closeModal}
+                productData={productData?.data}
+                token={token}
+                fetchUpdateProductData={fetchUpdateProductData}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  } else {
     return (
       <div className="flex items-center justify-center w-full h-screen">
         <Spin size="large" />
       </div>
     );
   }
-
-  return (
-    <div className="m-5">
-      <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
-        {productData?.data?.name}
-      </h2>
-      <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
-        <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
-          <p>
-            <span className="font-semibold">ID:</span> {productData?.data?.id}
-          </p>
-          <p>
-            <span className="font-semibold">Description:</span>{" "}
-            {productData?.data?.description}
-          </p>
-          <p>
-            <span className="font-semibold">Price:</span>{" "}
-            {productData?.data?.price}$
-          </p>
-          <p>
-            <span className="font-semibold">Stock:</span>{" "}
-            {productData?.data?.stock}
-          </p>
-          <div className="flex gap-4 mt-8 w-full">
-            <Popconfirm
-              title="Delete the task"
-              description="Are you sure to delete this task?"
-              onConfirm={deleteProductAction}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button color="danger" variant="solid" className="flex-1">
-                Delete
-              </Button>
-            </Popconfirm>
-            <Button
-              color="primary"
-              variant="solid"
-              className="flex-1"
-              onClick={showModal}
-            >
-              Edit
-            </Button>
-            <EditProductModal
-              openModal={open}
-              closeModal={closeModal}
-              productData={productData?.data}
-              token={token}
-              fetchUpdateProductData={fetchUpdateProductData}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 }
