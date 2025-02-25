@@ -219,6 +219,7 @@ function UpdateOrderModal({
               placeholder="Select a product"
               options={products.map((product) => ({
                 value: product.id,
+                disabled: product.stock === 0,
                 label: `${product.name} (Stock: ${product.stock})`,
               }))}
               value={selectedProduct}

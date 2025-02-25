@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteUser, fetchIdUser } from "@/services/apis/users-api";
 import EditModal from "@/components/myProfile/updateData";
+import { DeleteOutlined, EditOutlined, LogoutOutlined } from "@ant-design/icons";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -101,7 +102,7 @@ export default function Home() {
         <div className="relative flex items-center border-b-2 border-gray-300 pb-2 mb-5 w-full">
           <h2 className="mx-auto text-xl font-bold">My Profile</h2>
         </div>
-        <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
+        <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl w-auto">
           <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
             <p>
               <span className="font-semibold">ID:</span> {userData?.data?.id}
@@ -134,7 +135,7 @@ export default function Home() {
               cancelText="No"
             >
               <Button color="danger" variant="solid" className="flex-1">
-                Delete
+              <DeleteOutlined/>
               </Button>
             </Popconfirm>
             <Button
@@ -143,7 +144,7 @@ export default function Home() {
               className="flex-1"
               onClick={showModal}
             >
-              Edit
+              <EditOutlined />
             </Button>
             <EditModal
               openModal={open}
@@ -160,7 +161,7 @@ export default function Home() {
               className="flex-1"
               onClick={logOut}
             >
-              Log Out
+              <LogoutOutlined />
             </Button>
           </div>
         </div>

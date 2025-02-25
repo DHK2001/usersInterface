@@ -2,7 +2,7 @@
 
 import { fetchIdUser } from "@/services/apis/users-api";
 import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
@@ -13,7 +13,6 @@ export default function Home() {
   const [token, setToken] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const queryClient = useQueryClient();
 
   const fetchToken = async () => {
     const token = await getTokenFromCookie();
@@ -63,7 +62,7 @@ export default function Home() {
           <h2 className="mx-auto text-xl font-bold">User Profile</h2>
         </div>
         <div className="flex justify-center items-center w-full">
-          <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md">
+          <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl w-auto">
             <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
               <p>
                 <span className="font-semibold">ID:</span> {userData?.data?.id}

@@ -113,7 +113,7 @@ export default function OrderDetails() {
           />
           <h2 className="mx-auto text-xl font-bold">Order</h2>
         </div>
-        <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
+        <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl w-auto">
           <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
             <p>
               <span className="font-semibold">Id:</span> {orderData?.data?.id}

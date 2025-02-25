@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spin, Input, Button, Select } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
 import CreateOrderModal from "@/components/orders/createOrder";
 import { Order } from "@/services/interfaces/orders-interface";
 import { fetchAllOrders } from "@/services/apis/orders-apis";
@@ -136,22 +137,22 @@ export default function Orders() {
           fetchCreatedOrder={fetchCreatedOrder}
         />
 
-        <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
-          {filteredOrders.length > 0 ? (
-            filteredOrders.map((order) => (
+        {filteredOrders.length > 0 ? (
+          <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
+            {filteredOrders.map((order) => (
               <div
                 key={order.id}
-                className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm"
+                className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm flex flex-col justify-between"
               >
-                <h3 className="font-semibold text-lg text-blue-600">
-                  {order.id}
-                </h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  {order.finalized ? "Finalized" : "Active"}
-                </p>
-                <p className="text-sm text-gray-500 mt-2">
-                  {new Date(order.orderDate).toLocaleDateString()}
-                </p>
+                  <h3 className="font-semibold text-lg text-blue-600">
+                    {order.id}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {order.finalized ? "Finalized" : "Active"}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {new Date(order.orderDate).toLocaleDateString()}
+                  </p>
                 <button
                   className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                   onClick={() => router.push(`/orders/${order.id}`)}
@@ -159,11 +160,16 @@ export default function Orders() {
                   View Details
                 </button>
               </div>
-            ))
-          ) : (
-            <p className="text-gray-500">No orders found</p>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center">
+            <InboxOutlined className="text-6xl text-gray-300 block mx-auto mb-4" />
+            <h2 className="text-lg font-semibold text-gray-400">
+              No data found
+            </h2>
+          </div>
+        )}
       </div>
     );
   } else {

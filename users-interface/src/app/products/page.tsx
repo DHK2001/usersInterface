@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spin, Input, Button } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
 import { Product } from "@/services/interfaces/products-interfaces";
 import { fetchAllProducts } from "@/services/apis/products-apis";
 import CreateProductModal from "@/components/products/createProduct";
@@ -112,19 +113,19 @@ export default function Products() {
           token={token}
           fetchCreatedProduct={fetchUpdateData}
         />
-        <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
+        {filteredProducts.length > 0 ? (
+          <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
+            {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm"
+                className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm flex flex-col justify-between"
               >
-                <h3 className="font-semibold text-lg text-blue-600">
-                  {product.name}
-                </h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  {product.description}
-                </p>
+                  <h3 className="font-semibold text-lg text-blue-600">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {product.description}
+                  </p>
                 <button
                   className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                   onClick={() => router.push(`/products/${product.id}`)}
@@ -132,11 +133,16 @@ export default function Products() {
                   View Details
                 </button>
               </div>
-            ))
-          ) : (
-            <p className="text-gray-500">No products found</p>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center">
+            <InboxOutlined className="text-6xl text-gray-300 block mx-auto mb-4" />
+            <h2 className="text-lg font-semibold text-gray-400">
+              No data found
+            </h2>
+          </div>
+        )}
       </div>
     );
   } else {

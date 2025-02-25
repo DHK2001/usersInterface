@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spin, Input } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
 import { User } from "@/services/interfaces/users-interfaces";
 
 export default function Home() {
@@ -86,18 +87,18 @@ export default function Home() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map(
+        {filteredUsers.length > 0 ? (
+          <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
+            {filteredUsers.map(
               (user) =>
                 user.id !== userId && (
                   <div
                     key={user.id}
-                    className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm"
+                    className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm flex flex-col justify-between"
                   >
-                    <h3 className="font-semibold text-lg text-blue-600">
-                      {user.firstName} {user.lastName}
-                    </h3>
+                      <h3 className="font-semibold text-lg text-blue-600 text-center">
+                        {user.firstName} {user.lastName}
+                      </h3>
                     <button
                       className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                       onClick={() => router.push(`/users/${user.id}`)}
@@ -106,11 +107,16 @@ export default function Home() {
                     </button>
                   </div>
                 )
-            )
-          ) : (
-            <p className="text-gray-500">No users found</p>
-          )}
-        </div>
+            )}
+          </div>
+        ) : (
+          <div className="text-center">
+            <InboxOutlined className="text-6xl text-gray-300 block mx-auto mb-4" />
+            <h2 className="text-lg font-semibold text-gray-400">
+              No data found
+            </h2>
+          </div>
+        )}
       </div>
     );
   } else {
