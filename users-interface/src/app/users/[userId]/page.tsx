@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
+import { LeftOutlined } from "@ant-design/icons";
 
 export default function Home() {
   const { userId } = useParams();
@@ -51,33 +52,41 @@ export default function Home() {
 
   if (!loading && !isLoading) {
     return (
-      <div className="m-5">
-        <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
-          User Profile
-        </h2>
-        <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
-          <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
-            <p>
-              <span className="font-semibold">ID:</span> {userData?.data?.id}
-            </p>
-            <p>
-              <span className="font-semibold">First Name:</span>{" "}
-              {userData?.data?.firstName}
-            </p>
-            <p>
-              <span className="font-semibold">Last Name:</span>{" "}
-              {userData?.data?.lastName}
-            </p>
-            <p>
-              <span className="font-semibold">Email:</span>{" "}
-              {userData?.data?.email}
-            </p>
-            <p>
-              <span className="font-semibold">Creation Date:</span>{" "}
-              {new Date(
-                userData?.data?.creationDate ?? ""
-              ).toLocaleDateString()}
-            </p>
+      <div className="m-5 w-full max-w-4xl flex flex-col items-center">
+        <div className="relative flex items-center border-b-2 border-gray-300 pb-2 mb-5 w-full">
+          <LeftOutlined
+            className="absolute left-0 cursor-pointer"
+            onClick={() => {
+              router.push(`/`);
+            }}
+          />
+          <h2 className="mx-auto text-xl font-bold">User Profile</h2>
+        </div>
+        <div className="flex justify-center items-center w-full">
+          <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md">
+            <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
+              <p>
+                <span className="font-semibold">ID:</span> {userData?.data?.id}
+              </p>
+              <p>
+                <span className="font-semibold">First Name:</span>{" "}
+                {userData?.data?.firstName}
+              </p>
+              <p>
+                <span className="font-semibold">Last Name:</span>{" "}
+                {userData?.data?.lastName}
+              </p>
+              <p>
+                <span className="font-semibold">Email:</span>{" "}
+                {userData?.data?.email}
+              </p>
+              <p>
+                <span className="font-semibold">Creation Date:</span>{" "}
+                {new Date(
+                  userData?.data?.creationDate ?? ""
+                ).toLocaleDateString()}
+              </p>
+            </div>
           </div>
         </div>
       </div>

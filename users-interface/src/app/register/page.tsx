@@ -169,6 +169,12 @@ const Login: React.FC = () => {
               <Button type="primary" htmlType="submit" block>
                 Sign Up
               </Button>
+              <p
+                className="text-center pt-2 cursor-pointer hover:text-blue-500 hover:font-bold"
+                onClick={() => router.push("/login")}
+              >
+                or, login
+              </p>
             </Form.Item>
           </Form>
         </Spin>

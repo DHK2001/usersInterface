@@ -73,11 +73,17 @@ export default function Home() {
   const deleteProfile = async () => {
     setLoading(true);
     try {
-      await deleteUser(token, userId);
-      storeTokenInCookie("");
-      setLoading(false);
-      message.success("Profile deleted successfully");
-      router.push(`/login`);
+      const data = await deleteUser(token, userId);
+
+      if (data.status === 200) {
+        storeTokenInCookie("");
+        setLoading(false);
+        message.success("Profile deleted successfully");
+        router.push(`/login`);
+      } else {
+        setLoading(false);
+        message.error("Cant delete profile with orders actives");
+      }
     } catch (error) {
       setLoading(false);
       message.error("An unexpected error occurred");
@@ -91,10 +97,10 @@ export default function Home() {
 
   if (!loading && !isLoading) {
     return (
-      <div className="m-5">
-        <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 pb-2 text-center">
-          My Profile
-        </h2>
+      <div className="m-5 w-full max-w-4xl flex flex-col items-center">
+        <div className="relative flex items-center border-b-2 border-gray-300 pb-2 mb-5 w-full">
+          <h2 className="mx-auto text-xl font-bold">My Profile</h2>
+        </div>
         <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
           <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
             <p>

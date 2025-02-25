@@ -76,7 +76,7 @@ export default function Home() {
 
   if (!loading && !isLoading) {
     return (
-      <div className="flex flex-col items-center p-4">
+      <div className="w-full max-w-4xl m-5">
         <h2 className="text-xl font-bold mb-6 border-b-2 border-gray-300 w-full pb-2 text-center">
           All Users
         </h2>
@@ -93,7 +93,7 @@ export default function Home() {
                 user.id !== userId && (
                   <div
                     key={user.id}
-                    className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow"
+                    className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm"
                   >
                     <h3 className="font-semibold text-lg text-blue-600">
                       {user.firstName} {user.lastName}
