@@ -89,7 +89,9 @@ export default function ProductDetails() {
               router.push(`/products`);
             }}
           />
-          <h2 className="mx-auto text-xl font-bold">{productData?.data?.name}</h2>
+          <h2 className="mx-auto text-xl font-bold">
+            {productData?.data?.name}
+          </h2>
         </div>
         <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl max-w-md w-full">
           <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
@@ -102,7 +104,10 @@ export default function ProductDetails() {
             </p>
             <p>
               <span className="font-semibold">Price:</span>{" "}
-              {productData?.data?.price}$
+              {new Intl.NumberFormat("en-IN", {
+                style: "currency",
+                currency: "USD",
+              }).format(productData?.data?.price ?? 0)}
             </p>
             <p>
               <span className="font-semibold">Stock:</span>{" "}
