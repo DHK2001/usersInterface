@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 type UpdateFormValues = {
   name: string;
   description: string;
+  imageUrl: string;
   price: number;
   stock: number;
 };
@@ -49,6 +50,7 @@ function CreateProductModal({
       const registerPayload: CreateProductDto = {
         name: values.name,
         description: values.description,
+        imageUrl: values.imageUrl,
         price: Number(values.price),
         stock: Number(values.stock),
       }
@@ -120,6 +122,19 @@ function CreateProductModal({
               {
                 required: true,
                 message: "Please input the product description!",
+              },
+            ]}
+          >
+            <Input placeholder="Enter the product description" />
+          </Form.Item>
+
+          <Form.Item
+            label="Image Url"
+            name="imageUrl"
+            rules={[
+              {
+                required: true,
+                message: "Please input the product image url!",
               },
             ]}
           >

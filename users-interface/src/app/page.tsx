@@ -87,7 +87,7 @@ export default function Home() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        {filteredUsers.length > 0 ? (
+        {filteredUsers.length - 1 > 0 ? (
           <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>
             {filteredUsers.map(
               (user) =>

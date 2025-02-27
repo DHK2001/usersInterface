@@ -105,9 +105,6 @@ export default function Home() {
         <div className="flex flex-col items-center p-8 bg-white shadow-lg rounded-2xl w-auto">
           <div className="flex flex-col gap-4 text-lg text-gray-700 w-full">
             <p>
-              <span className="font-semibold">ID:</span> {userData?.data?.id}
-            </p>
-            <p>
               <span className="font-semibold">First Name:</span>{" "}
               {userData?.data?.firstName}
             </p>

@@ -1,6 +1,7 @@
 export interface CreateProductDto {
   name: string;
   description: string;
+  imageUrl: string;
   price: number;
   stock: number;
 }
@@ -8,6 +9,7 @@ export interface CreateProductDto {
 export interface UpdateProductDto {
   name: string;
   description: string;
+  imageUrl: string;
   price: number;
   stock: number;
 }
@@ -16,6 +18,7 @@ export interface ProductResponse {
   id: string;
   name: string;
   description: string;
+  imageUrl: string;
   price: number;
   stock: number;
 }
@@ -29,6 +32,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
+  imageUrl: string;
   price: number;
   stock: number;
 }

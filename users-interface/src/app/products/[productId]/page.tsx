@@ -4,7 +4,7 @@ import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button, message, Popconfirm, Spin } from "antd";
+import { Button, message, Popconfirm, Spin, Image } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import { deleteProduct, fetchIdProduct } from "@/services/apis/products-apis";
 import EditProductModal from "@/components/products/updateProductData";
@@ -98,6 +98,12 @@ export default function ProductDetails() {
             <p>
               <span className="font-semibold">ID:</span> {productData?.data?.id}
             </p>
+            <div className="flex justify-center">
+              <Image
+                width={250}
+                src={productData?.data?.imageUrl ?? ""}
+              />
+            </div>
             <p>
               <span className="font-semibold">Description:</span>{" "}
               {productData?.data?.description}

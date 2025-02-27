@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 type UpdateFormValues = {
   name: string;
   description: string;
+  imageUrl: string;
   price: number;
   stock: number;
 };
@@ -44,6 +45,7 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
       form.setFieldsValue({
         name: productData.name || "",
         description: productData.description || "",
+        imageUrl: productData.imageUrl || "",
         price: productData.price || 0,
         stock: productData.stock || 0,
       });
@@ -54,8 +56,9 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
     setLoading(true);
     try {
       const registerPayload: UpdateProductDto = {
-        name: values.name ?? productData?.name ?? "",
-        description: values.description ?? productData?.description ?? "",
+        name: values.name ?? productData?.name,
+        description: values.description ?? productData?.description,
+        imageUrl: values.imageUrl ?? productData?.imageUrl,
         price: Number(values.price) ?? productData?.price,
         stock: Number(values.stock) ?? productData?.stock,
       };
@@ -63,6 +66,7 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
       if (
         registerPayload.name === productData?.name &&
         registerPayload.description === productData?.description &&
+        registerPayload.imageUrl === productData?.imageUrl &&
         registerPayload.price === productData?.price &&
         registerPayload.stock === productData?.stock
       ) {
@@ -140,7 +144,19 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
                 required: true,
                 message: "Please input the product description!",
               },
-              { min: 1, message: "The product name must be at least 3 characters long!" },
+            ]}
+          >
+            <Input placeholder="Enter the product description" />
+          </Form.Item>
+
+          <Form.Item
+            label="Image Url"
+            name="imageUrl"
+            rules={[
+              {
+                required: true,
+                message: "Please input the product image url!",
+              },
             ]}
           >
             <Input placeholder="Enter the product description" />
