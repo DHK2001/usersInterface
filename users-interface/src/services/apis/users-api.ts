@@ -1,3 +1,4 @@
+import { dbs } from "@/store";
 import {
   CreateUserDto,
   deleteUserResponse,
@@ -7,7 +8,18 @@ import {
   User,
 } from "../interfaces/users-interfaces";
 
-const usersUrl = "http://localhost:8083/v1/users";
+const MONGO_URL = process.env.MONGO_URL;
+const MSSQL_URL = process.env.MSSQL_URL;
+
+var usersUrl = "";
+
+if ( MONGO_URL && MSSQL_URL) {
+  if (dbs === "mongo") {
+    usersUrl = MONGO_URL + "/users";
+  } else {
+    usersUrl = MSSQL_URL + "/users";
+  }
+}
 
 export const fetchAllUsers = async (token: string): Promise<{
   status: number;

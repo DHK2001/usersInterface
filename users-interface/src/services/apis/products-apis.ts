@@ -1,6 +1,18 @@
+import { dbs } from "@/store";
 import { CreateProductDto, deleteProductResponse, Product, UpdateProductDto } from "../interfaces/products-interfaces";
 
-const productsUrl = "http://localhost:8083/v1/products";
+const MONGO_URL = process.env.MONGO_URL;
+const MSSQL_URL = process.env.MSSQL_URL;
+
+var productsUrl = "";
+
+if ( MONGO_URL && MSSQL_URL) {
+  if (dbs === "mongo") {
+    productsUrl = MONGO_URL + "/products";
+  } else {
+    productsUrl = MSSQL_URL + "/products";
+  }
+}
 
 export const fetchAllProducts = async (
   token: string

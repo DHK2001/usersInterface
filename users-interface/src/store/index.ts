@@ -16,3 +16,5 @@ export const useStore = create<Store>()((set) => ({
     localStorageSetId(userIdP);
   },
 }));
+
+export var dbs = "mongo";

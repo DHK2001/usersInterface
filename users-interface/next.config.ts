@@ -1,13 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: '/v1',
-        destination: 'http://localhost:8083/v1/',
-      },
-    ]
+  env: {
+    MONGO_URL: 'http://localhost:8083/v1/mongoDB',
+    MSSQL_URL: 'http://localhost:8083/v1',
   },
 };
 

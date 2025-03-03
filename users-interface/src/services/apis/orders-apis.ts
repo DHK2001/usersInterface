@@ -1,6 +1,18 @@
+import { dbs } from "@/store";
 import { CreateOrderDto, DeleteOrderResponse, FinalizedOrderResponse, Order, UpdateOrderDto } from "../interfaces/orders-interface";
 
-const ordersUrl = "http://localhost:8083/v1/orders";
+const MONGO_URL = process.env.MONGO_URL;
+const MSSQL_URL = process.env.MSSQL_URL;
+
+var ordersUrl = "";
+
+if ( MONGO_URL && MSSQL_URL) {
+  if (dbs === "mongo") {
+    ordersUrl = MONGO_URL + "/orders";
+  } else {
+    ordersUrl = MSSQL_URL + "/orders";
+  }
+}
 
 export const fetchAllOrders = async (
   token: string,
