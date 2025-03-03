@@ -50,7 +50,7 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
         stock: productData.stock || 0,
       });
     }
-  }, [form]);
+  });
 
   const onFinish = async (values: UpdateFormValues) => {
     setLoading(true);
@@ -83,6 +83,7 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
       if (registerR.status === 200) {
         setStatus({ type: "success", content: "Data updated successfully" });
         fetchUpdateProductData();
+        form.resetFields();
         closeModal();
       } else if (registerR.status === 400) {
         setStatus({
@@ -114,7 +115,10 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
       open={openModal}
       okText="Create"
       onOk={form.submit}
-      onCancel={() => closeModal()}
+      onCancel={() => {
+        form.resetFields();
+        closeModal();
+      }}
     >
       <Spin tip="Loading" size="large" spinning={loading}>
         <Form

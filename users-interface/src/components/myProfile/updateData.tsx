@@ -19,7 +19,13 @@ interface Props {
   fetchUpdateData: () => void;
 }
 
-function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: Props) {
+function EditModal({
+  token,
+  userData,
+  openModal,
+  closeModal,
+  fetchUpdateData,
+}: Props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{
@@ -46,7 +52,7 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
         email: userData.email,
       });
     }
-  }, [form]);
+  });
 
   const onFinish = async (values: UpdateFormValues) => {
     setLoading(true);
@@ -75,6 +81,7 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
       if (registerR.status === 200) {
         setStatus({ type: "success", content: "Data updated successfully" });
         fetchUpdateData();
+        form.resetFields();
         closeModal();
       } else if (registerR.status === 400) {
         setStatus({
@@ -105,7 +112,10 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
       open={openModal}
       okText="Update"
       onOk={form.submit}
-      onCancel={() => closeModal()}
+      onCancel={() => {
+        form.resetFields();
+        closeModal();
+      }}
     >
       <Spin tip="Loading" size="large" spinning={loading}>
         <Form
@@ -116,7 +126,9 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
           onFinishFailed={onFinishFailed}
           style={{ width: "100%", maxWidth: 400 }}
         >
-          <Form.Item label="First Name" name="firstName"
+          <Form.Item
+            label="First Name"
+            name="firstName"
             rules={[
               { required: true, message: "Please input your first name!" },
             ]}
@@ -124,7 +136,9 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
             <Input placeholder="Enter your first name" />
           </Form.Item>
 
-          <Form.Item label="Last Name" name="lastName" 
+          <Form.Item
+            label="Last Name"
+            name="lastName"
             rules={[
               { required: true, message: "Please input your last name!" },
             ]}
@@ -132,11 +146,14 @@ function EditModal({ token, userData, openModal, closeModal, fetchUpdateData }: 
             <Input placeholder="Enter your last name" />
           </Form.Item>
 
-          <Form.Item label="Email" name="email"
+          <Form.Item
+            label="Email"
+            name="email"
             rules={[
               { required: true, message: "Please input your email!" },
               { type: "email", message: "Please enter a valid email!" },
-            ]}>
+            ]}
+          >
             <Input placeholder="Enter your email" />
           </Form.Item>
         </Form>
