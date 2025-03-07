@@ -28,9 +28,11 @@ export default function Products() {
   };
 
   const fetchUpdateData = async () => {
+    setLoading(true);
     await queryClient.invalidateQueries({
       queryKey: ["productsData", token],
     });
+    setLoading(false);
   };
 
   const fetchToken = async () => {
@@ -51,7 +53,6 @@ export default function Products() {
   useEffect(() => {
     setLoading(true);
     fetchToken();
-    setLoading(false);
   }, [token]);
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export default function Products() {
     queryFn: async () => {
       const data = await fetchAllProducts(token);
       setProducts(data.data || []);
+      setLoading(false);
       return data;
     },
   });

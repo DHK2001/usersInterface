@@ -26,9 +26,11 @@ export default function ProductDetails() {
   };
 
   const fetchUpdateProductData = async () => {
+    setLoading(true);
     await queryClient.invalidateQueries({
       queryKey: ["productData", token],
     });
+    setLoading(false);
   };
 
   const fetchToken = async () => {
@@ -49,7 +51,6 @@ export default function ProductDetails() {
   useEffect(() => {
     setLoading(true);
     fetchToken();
-    setLoading(false);
   }, [token]);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ export default function ProductDetails() {
     queryKey: ["productData", token],
     queryFn: async () => {
       const data = await fetchIdProduct(token, productId as string);
+      setLoading(false);
       return data;
     },
   });

@@ -17,4 +17,5 @@ export const useStore = create<Store>()((set) => ({
   },
 }));
 
-export var dbs = "mongo";
+//export var dbs = "mongo";
+export var dbs = "mssql";

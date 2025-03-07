@@ -48,7 +48,6 @@ export default function Home() {
   useEffect(() => {
     setLoading(true);
     fetchToken();
-    setLoading(false);
   }, [token]);
 
   useEffect(() => {
@@ -58,15 +57,18 @@ export default function Home() {
   });
 
   const fetchUpdateData = async () => {
+    setLoading(true);
     await queryClient.invalidateQueries({
       queryKey: ["userData", token],
     });
+    setLoading(false);
   };
 
   const { data: userData, isLoading } = useQuery({
     queryKey: ["userData", token],
     queryFn: async () => {
       const data = await fetchIdUser(token, userId);
+      setLoading(false);
       return data;
     },
   });

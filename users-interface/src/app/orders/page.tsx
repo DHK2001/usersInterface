@@ -31,9 +31,11 @@ export default function Orders() {
   };
 
   const fetchCreatedOrder = async () => {
+    setLoading(true);
     await queryClient.invalidateQueries({
       queryKey: ["ordersData", token],
     });
+    setLoading(false);
   };
 
   const fetchToken = async () => {
@@ -54,7 +56,6 @@ export default function Orders() {
   useEffect(() => {
     setLoading(true);
     fetchToken();
-    setLoading(false);
   }, [token]);
 
   useEffect(() => {
@@ -68,6 +69,7 @@ export default function Orders() {
     queryFn: async () => {
       const data = await fetchAllOrders(token, userId);
       setOrders(data.data || []);
+      setLoading(false);
       return data;
     },
   });

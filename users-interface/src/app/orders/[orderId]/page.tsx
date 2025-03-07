@@ -30,9 +30,11 @@ export default function OrderDetails() {
   };
 
   const fetchUpdateOrderData = async () => {
+    setLoading(true);
     await queryClient.invalidateQueries({
       queryKey: ["orderData", token],
     });
+    setLoading(false);
   };
 
   const fetchToken = async () => {
@@ -53,7 +55,6 @@ export default function OrderDetails() {
   useEffect(() => {
     setLoading(true);
     fetchToken();
-    setLoading(false);
   }, [token]);
 
   useEffect(() => {
@@ -66,6 +67,7 @@ export default function OrderDetails() {
     queryKey: ["orderData", token],
     queryFn: async () => {
       const data = await fetchIdOrder(token, orderId as string);
+      setLoading(false);
       return data;
     },
   });

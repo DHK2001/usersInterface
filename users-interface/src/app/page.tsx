@@ -36,7 +36,6 @@ export default function Home() {
   useEffect(() => {
     setLoading(true);
     fetchToken();
-    setLoading(false);
   }, [token]);
 
   useEffect(() => {
@@ -50,6 +49,7 @@ export default function Home() {
     queryFn: async () => {
       const data = await fetchAllUsers(token);
       setUsers(data.data || []);
+      setLoading(false);
       return data;
     },
   });
