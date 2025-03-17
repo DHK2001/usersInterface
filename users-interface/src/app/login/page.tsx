@@ -18,33 +18,14 @@ type LoginFormValues = {
 };
 
 const Login: React.FC = () => {
-  const [token, setToken] = useState("");
+  const { token, setToken } = useStore();
   const { setUserId } = useStore();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [status, setStatus] = useState<{
     type: "success" | "error" | null;
     content: string;
   }>({ type: null, content: "" });
-
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    }
-  };
-
-  const validateSession = () => {
-    if (isTokenValid(token)) {
-      router.push(`/`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-    setLoading(false);
-  }, [token]);
 
   useEffect(() => {
     if (status.type) {
@@ -64,6 +45,7 @@ const Login: React.FC = () => {
       if (loginR.status === 200) {
         setStatus({ type: "success", content: "Login Successful" });
         storeTokenInCookie(loginR.data?.accessToken ?? "");
+        setToken(loginR.data?.accessToken ?? "");
         const userId = getUserIdFromToken(loginR.data?.accessToken ?? "");
         setUserId(userId ?? "");
         router.push(`/`);

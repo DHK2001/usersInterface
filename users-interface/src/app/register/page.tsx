@@ -24,25 +24,6 @@ const Login: React.FC = () => {
     content: string;
   }>({ type: null, content: "" });
 
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    }
-  };
-
-  const validateSession = () => {
-    if (isTokenValid(token)) {
-      router.push(`/`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-    setLoading(false);
-  }, [token]);
-
   useEffect(() => {
     if (status.type) {
       if (status.type === "success") {
