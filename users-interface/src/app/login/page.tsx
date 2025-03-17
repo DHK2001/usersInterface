@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button, Form, Input, message, Spin } from "antd";
-import { loginUser } from "@/services/apis/users-api";
+import { loginUser } from "@/services/users";
 import { useRouter } from "next/navigation";
 import {
   getTokenFromCookie,
@@ -45,12 +45,6 @@ const Login: React.FC = () => {
     fetchToken();
     setLoading(false);
   }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  });
 
   useEffect(() => {
     if (status.type) {

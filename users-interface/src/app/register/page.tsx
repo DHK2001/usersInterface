@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Input, message, Spin } from "antd";
 import { useRouter } from "next/navigation";
-import { CreateUserDto } from "@/services/interfaces/users-interfaces";
-import { createUser } from "@/services/apis/users-api";
+import { CreateUserDto } from "@/models/users";
+import { createUser } from "@/services/users";
 import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 
 type LoginFormValues = {
@@ -42,12 +42,6 @@ const Login: React.FC = () => {
     fetchToken();
     setLoading(false);
   }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  });
 
   useEffect(() => {
     if (status.type) {

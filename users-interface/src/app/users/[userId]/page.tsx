@@ -1,44 +1,18 @@
 "use client";
 
-import { fetchIdUser } from "@/services/apis/users-api";
-import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
+import { fetchIdUser } from "@/services/users";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Spin } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
+import { useStore } from "@/store";
 
 export default function Home() {
   const { userId } = useParams();
-  const [token, setToken] = useState("");
+  const { token } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    } else {
-      router.push(`/login`);
-    }
-  };
-
-  const validateSession = () => {
-    if (!isTokenValid(token)) {
-      router.push(`/login`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-  }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  });
 
   const { data: userData, isLoading } = useQuery({
     queryKey: ["userData", token],

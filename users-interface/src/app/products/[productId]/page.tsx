@@ -1,18 +1,18 @@
 "use client";
 
-import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, message, Popconfirm, Spin, Image } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
-import { deleteProduct, fetchIdProduct } from "@/services/apis/products-apis";
-import EditProductModal from "@/components/products/updateProductData";
+import { deleteProduct, fetchIdProduct } from "@/services/products";
+import EditProductModal from "@/components/products/update-product-data";
+import { useStore } from "@/store";
 
 export default function ProductDetails() {
   const [open, setOpen] = useState(false);
   const { productId } = useParams();
-  const [token, setToken] = useState("");
+  const { token } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const queryClient = useQueryClient();
@@ -32,32 +32,6 @@ export default function ProductDetails() {
     });
     setLoading(false);
   };
-
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    } else {
-      router.push(`/login`);
-    }
-  };
-
-  const validateSession = () => {
-    if (!isTokenValid(token)) {
-      router.push(`/login`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-  }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  });
 
   const { data: productData, isLoading } = useQuery({
     queryKey: ["productData", token],
@@ -101,10 +75,7 @@ export default function ProductDetails() {
               <span className="font-semibold">ID:</span> {productData?.data?.id}
             </p>
             <div className="flex justify-center">
-              <Image
-                width={250}
-                src={productData?.data?.imageUrl ?? ""}
-              />
+              <Image width={250} src={productData?.data?.imageUrl ?? ""} />
             </div>
             <p>
               <span className="font-semibold">Description:</span>{" "}

@@ -1,20 +1,19 @@
 "use client";
 
-import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Spin, Input, Button, Select } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import CreateOrderModal from "@/components/orders/createOrder";
-import { Order } from "@/services/interfaces/orders-interface";
-import { fetchAllOrders } from "@/services/apis/orders-apis";
+import CreateOrderModal from "@/components/orders/create-order";
+import { Order } from "@/models/orders";
 import { useStore } from "@/store";
+import { fetchAllOrders } from "@/services/orders";
 
 export default function Orders() {
   const { userId } = useStore();
   const [open, setOpen] = useState(false);
-  const [token, setToken] = useState("");
+  const { token } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -37,32 +36,6 @@ export default function Orders() {
     });
     setLoading(false);
   };
-
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    } else {
-      router.push(`/login`);
-    }
-  };
-
-  const validateSession = () => {
-    if (!isTokenValid(token)) {
-      router.push(`/login`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-  }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  }, [token]);
 
   const { data: ordersData, isLoading } = useQuery({
     queryKey: ["ordersData", token],
@@ -146,15 +119,15 @@ export default function Orders() {
                 key={order.id}
                 className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm flex flex-col justify-between"
               >
-                  <h3 className="font-semibold text-lg text-blue-600">
-                    {order.id}
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {order.finalized ? "Finalized" : "Active"}
-                  </p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {new Date(order.orderDate).toLocaleDateString()}
-                  </p>
+                <h3 className="font-semibold text-lg text-blue-600">
+                  {order.id}
+                </h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  {order.finalized ? "Finalized" : "Active"}
+                </p>
+                <p className="text-sm text-gray-500 mt-2">
+                  {new Date(order.orderDate).toLocaleDateString()}
+                </p>
                 <button
                   className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                   onClick={() => router.push(`/orders/${order.id}`)}

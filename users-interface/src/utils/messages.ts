@@ -1,0 +1,1 @@
+export const authorizationNotFound = "Authorization token not found";

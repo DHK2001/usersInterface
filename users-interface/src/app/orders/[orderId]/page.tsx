@@ -1,22 +1,18 @@
 "use client";
 
-import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, message, Popconfirm, Spin, Table } from "antd";
-import {
-  deleteOrder,
-  fetchIdOrder,
-  finalizeOrder,
-} from "@/services/apis/orders-apis";
 import { LeftOutlined } from "@ant-design/icons";
-import UpdateOrderModal from "@/components/orders/updateOrder";
+import UpdateOrderModal from "@/components/orders/update-order";
+import { fetchIdOrder, finalizeOrder, deleteOrder } from "@/services/orders";
+import { useStore } from "@/store";
 
 export default function OrderDetails() {
   const [open, setOpen] = useState(false);
   const { orderId } = useParams();
-  const [token, setToken] = useState("");
+  const { token } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const queryClient = useQueryClient();
@@ -36,32 +32,6 @@ export default function OrderDetails() {
     });
     setLoading(false);
   };
-
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    } else {
-      router.push(`/login`);
-    }
-  };
-
-  const validateSession = () => {
-    if (!isTokenValid(token)) {
-      router.push(`/login`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-  }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  });
 
   const { data: orderData, isLoading } = useQuery({
     queryKey: ["orderData", token],

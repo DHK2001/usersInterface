@@ -1,9 +1,8 @@
 "use client";
 
-import { updateOrder } from "@/services/apis/orders-apis";
-import { fetchAllProducts } from "@/services/apis/products-apis";
-import { UpdateOrderDto, Order } from "@/services/interfaces/orders-interface";
-import { Product } from "@/services/interfaces/products-interfaces";
+import { fetchAllProducts } from "@/services/products";
+import { UpdateOrderDto, Order } from "@/models/orders";
+import { Product } from "@/models/products";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Form,
@@ -16,6 +15,7 @@ import {
   Spin,
 } from "antd";
 import { useEffect, useState } from "react";
+import { updateOrder } from "@/services/orders";
 
 interface Props {
   token: string;

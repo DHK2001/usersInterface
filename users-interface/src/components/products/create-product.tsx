@@ -1,7 +1,7 @@
 "use client";
 
-import { updateProduct } from "@/services/apis/products-apis";
-import { Product, UpdateProductDto } from "@/services/interfaces/products-interfaces";
+import { createProduct } from "@/services/products";
+import { CreateProductDto } from "@/models/products";
 import { Form, Input, message, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
 
@@ -15,13 +15,17 @@ type UpdateFormValues = {
 
 interface Props {
   token: string;
-  productData: Product | null | undefined;
   openModal: boolean;
   closeModal: () => void;
-  fetchUpdateProductData: () => void;
+  fetchCreatedProduct: () => void;
 }
 
-function EditProductModal({ token, productData, openModal, closeModal, fetchUpdateProductData }: Props) {
+function CreateProductModal({
+  token,
+  openModal,
+  closeModal,
+  fetchCreatedProduct,
+}: Props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{
@@ -40,55 +44,28 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
     }
   }, [status]);
 
-  useEffect(() => {
-    if (productData && form) {
-      form.setFieldsValue({
-        name: productData.name || "",
-        description: productData.description || "",
-        imageUrl: productData.imageUrl || "",
-        price: productData.price || 0,
-        stock: productData.stock || 0,
-      });
-    }
-  });
-
   const onFinish = async (values: UpdateFormValues) => {
     setLoading(true);
     try {
-      const registerPayload: UpdateProductDto = {
-        name: values.name ?? productData?.name,
-        description: values.description ?? productData?.description,
-        imageUrl: values.imageUrl ?? productData?.imageUrl,
-        price: Number(values.price) ?? productData?.price,
-        stock: Number(values.stock) ?? productData?.stock,
+      const registerPayload: CreateProductDto = {
+        name: values.name,
+        description: values.description,
+        imageUrl: values.imageUrl,
+        price: Number(values.price),
+        stock: Number(values.stock),
       };
 
-      if (
-        registerPayload.name === productData?.name &&
-        registerPayload.description === productData?.description &&
-        registerPayload.imageUrl === productData?.imageUrl &&
-        registerPayload.price === productData?.price &&
-        registerPayload.stock === productData?.stock
-      ) {
-        setStatus({ type: "error", content: "No changes detected" });
-        return;
-      }
+      const registerR = await createProduct(token, registerPayload);
 
-      const registerR = await updateProduct(
-        token,
-        productData?.id ?? "",
-        registerPayload
-      );
-
-      if (registerR.status === 200) {
-        setStatus({ type: "success", content: "Data updated successfully" });
-        fetchUpdateProductData();
+      if (registerR.status === 201) {
+        setStatus({ type: "success", content: "Product created successfully" });
+        fetchCreatedProduct();
         form.resetFields();
         closeModal();
       } else if (registerR.status === 400) {
         setStatus({
           type: "error",
-          content: "Account Edition failed.",
+          content: "Account creation failed. Product already exists",
         });
       } else {
         setStatus({
@@ -109,16 +86,11 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
 
   return (
     <Modal
-      forceRender
-      getContainer={false} 
-      title="Edit Product"
+      title="Create Product"
       open={openModal}
       okText="Create"
       onOk={form.submit}
-      onCancel={() => {
-        form.resetFields();
-        closeModal();
-      }}
+      onCancel={() => closeModal()}
     >
       <Spin tip="Loading" size="large" spinning={loading}>
         <Form
@@ -133,8 +105,11 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
             label="Name"
             name="name"
             rules={[
-              { required: true, message: "Please input your the product name!" },
-              { min: 3, message: "The product name must be at least 3 characters long!" },
+              { required: true, message: "Please input the product name!" },
+              {
+                min: 3,
+                message: "The product name must be at least 3 characters long!",
+              },
             ]}
           >
             <Input placeholder="Enter your the product name" />
@@ -170,10 +145,7 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
             label="Price"
             name="price"
             rules={[
-              {
-                required: true,
-                message: "Please input the product price!",
-              },
+              { required: true, message: "Please input the product price!" },
             ]}
           >
             <Input type="number" placeholder="Enter the product price" />
@@ -183,10 +155,7 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
             label="Stock"
             name="stock"
             rules={[
-              {
-                required: true,
-                message: "Please input the product stock!",
-              },
+              { required: true, message: "Please input the product stock!" },
             ]}
           >
             <Input type="number" placeholder="Enter the product stock" />
@@ -197,4 +166,4 @@ function EditProductModal({ token, productData, openModal, closeModal, fetchUpda
   );
 }
 
-export default EditProductModal;
+export default CreateProductModal;

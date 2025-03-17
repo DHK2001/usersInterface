@@ -1,18 +1,18 @@
 "use client";
 
-import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Spin, Input, Button } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import { Product } from "@/services/interfaces/products-interfaces";
-import { fetchAllProducts } from "@/services/apis/products-apis";
-import CreateProductModal from "@/components/products/createProduct";
+import { Product } from "@/models/products";
+import { fetchAllProducts } from "@/services/products";
+import CreateProductModal from "@/components/products/create-product";
+import { useStore } from "@/store";
 
 export default function Products() {
   const [open, setOpen] = useState(false);
-  const [token, setToken] = useState("");
+  const { token } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
@@ -34,32 +34,6 @@ export default function Products() {
     });
     setLoading(false);
   };
-
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    } else {
-      router.push(`/login`);
-    }
-  };
-
-  const validateSession = () => {
-    if (!isTokenValid(token)) {
-      router.push(`/login`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-  }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  }, [token]);
 
   const { data: productsData, isLoading } = useQuery({
     queryKey: ["productsData", token],
@@ -122,12 +96,12 @@ export default function Products() {
                 key={product.id}
                 className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm flex flex-col justify-between"
               >
-                  <h3 className="font-semibold text-lg text-blue-600">
-                    {product.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {product.description}
-                  </p>
+                <h3 className="font-semibold text-lg text-blue-600">
+                  {product.name}
+                </h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  {product.description}
+                </p>
                 <button
                   className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                   onClick={() => router.push(`/products/${product.id}`)}

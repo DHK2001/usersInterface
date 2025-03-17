@@ -1,12 +1,21 @@
 "use client";
 
-import { createOrder } from "@/services/apis/orders-apis";
-import { fetchAllProducts } from "@/services/apis/products-apis";
-import { CreateOrderDto } from "@/services/interfaces/orders-interface";
-import { Product } from "@/services/interfaces/products-interfaces";
+import { fetchAllProducts } from "@/services/products";
+import { CreateOrderDto } from "@/models/orders";
+import { Product } from "@/models/products";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Form, InputNumber, Select, Table, Button, message, Modal, Spin } from "antd";
+import {
+  Form,
+  InputNumber,
+  Select,
+  Table,
+  Button,
+  message,
+  Modal,
+  Spin,
+} from "antd";
 import { useEffect, useState } from "react";
+import { createOrder } from "@/services/orders";
 
 interface Props {
   token: string;
@@ -84,8 +93,9 @@ function CreateOrderModal({
 
   const updateProductAmount = (id: string, newAmount: number) => {
     setSelectedProducts((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, amount: Math.min(newAmount, p.stock) } : p // Limita al stock disponible
+      prev.map(
+        (p) =>
+          p.id === id ? { ...p, amount: Math.min(newAmount, p.stock) } : p // Limita al stock disponible
       )
     );
   };
@@ -133,7 +143,10 @@ function CreateOrderModal({
       title: "Amount",
       dataIndex: "amount",
       key: "amount",
-      render: (_: any, record: { id: string; amount: number; stock: number }) => (
+      render: (
+        _: any,
+        record: { id: string; amount: number; stock: number }
+      ) => (
         <InputNumber
           min={1}
           max={record.stock} // Máximo permitido según el stock

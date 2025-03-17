@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/providers/providers";
 import "@ant-design/v5-patch-for-react-19";
-import TopNavbar from "@/components/navBar/navbar";
+import TopNavbar from "@/components/nav-bar/nav-bar";
+import ClientComponent from "@/providers/ClientWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,8 @@ export default function RootLayout({
             <TopNavbar />
           </header>
           <main className="flex-grow overflow-y-auto flex flex-col items-center text-black">
-            {children}
+            <ClientComponent />
+            <div className="flex items-center justify-center w-full inset-0 z-0">{children}</div>
           </main>
           <footer className="border-t border-gray-400 text-gray-400 py-4 text-center w-full">
             <p className="text-sm sm:text-base">© {getActualYear()} User App</p>

@@ -1,7 +1,7 @@
 "use client";
 
-import { updateUser } from "@/services/apis/users-api";
-import { UpdateUserDto, User } from "@/services/interfaces/users-interfaces";
+import { updateUser } from "@/services/users";
+import { UpdateUserDto, User } from "@/models/users";
 import { Form, Input, message, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
 

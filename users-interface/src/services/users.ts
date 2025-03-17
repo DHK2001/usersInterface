@@ -1,31 +1,39 @@
 import { dbs } from "@/store";
-import { CreateProductDto, deleteProductResponse, Product, UpdateProductDto } from "../interfaces/products-interfaces";
+import {
+  CreateUserDto,
+  deleteUserResponse,
+  loginResponseDto,
+  loginUserDto,
+  UpdateUserDto,
+  User,
+} from "../models/users";
+import { authorizationNotFound } from "@/utils/messages";
 
 const MONGO_URL = process.env.MONGO_URL;
 const MSSQL_URL = process.env.MSSQL_URL;
 
-var productsUrl = "";
+var usersUrl = "";
 
-if ( MONGO_URL && MSSQL_URL) {
+if (MONGO_URL && MSSQL_URL) {
   if (dbs === "mongo") {
-    productsUrl = MONGO_URL + "/products";
+    usersUrl = MONGO_URL + "/users";
   } else {
-    productsUrl = MSSQL_URL + "/products";
+    usersUrl = MSSQL_URL + "/users";
   }
 }
 
-export const fetchAllProducts = async (
+export const fetchAllUsers = async (
   token: string
 ): Promise<{
   status: number;
-  data: Product[] | null;
+  data: User[] | null;
 }> => {
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {
-    const response = await fetch(productsUrl, {
+    const response = await fetch(usersUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -46,42 +54,14 @@ export const fetchAllProducts = async (
   }
 };
 
-export const createProduct = async (
-  token: string,
-  product: CreateProductDto
-): Promise<{ message: string, status: number; data: Product | null }> => {
-  try {
-    const response = await fetch(productsUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "authorization-token": token,
-      },
-      body: JSON.stringify(product),
-    });
-
-    const status = response.status;
-    const message = response.statusText;
-
-    if (!response.ok) {
-      return { message, status, data: null };
-    }
-
-    const data = await response.json();
-    return { message, status, data };
-  } catch (error) {
-    return { message: "", status: 500, data: null };
-  }
-};
-
-export const fetchIdProduct = async (
+export const fetchIdUser = async (
   token: string,
   id: String
-): Promise<{ status: number; data: Product | null }> => {
-  const url = `${productsUrl}/${id}`;
+): Promise<{ status: number; data: User | null }> => {
+  const url = `${usersUrl}/${id}`;
 
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {
@@ -106,15 +86,40 @@ export const fetchIdProduct = async (
   }
 };
 
-export const updateProduct = async (
+export const createUser = async (
+  user: CreateUserDto
+): Promise<{ status: number; data: User | null }> => {
+  try {
+    const response = await fetch(usersUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+
+    const status = response.status;
+
+    if (!response.ok) {
+      return { status, data: null };
+    }
+
+    const data = await response.json();
+    return { status, data };
+  } catch (error) {
+    return { status: 500, data: null };
+  }
+};
+
+export const updateUser = async (
   token: string,
   id: String,
-  user: UpdateProductDto
-): Promise<{ status: number; data: Product | null }> => {
-  const url = `${productsUrl}/${id}`;
+  user: UpdateUserDto
+): Promise<{ status: number; data: User | null }> => {
+  const url = `${usersUrl}/${id}`;
 
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {
@@ -140,19 +145,46 @@ export const updateProduct = async (
   }
 };
 
-export const deleteProduct = async (
+export const loginUser = async (
+  user: loginUserDto
+): Promise<{ status: number; data: loginResponseDto | null }> => {
+  const url = `${usersUrl}/loginUser`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+
+    const status = response.status;
+
+    if (!response.ok) {
+      return { status, data: null };
+    }
+
+    const data = await response.json();
+    return { status, data };
+  } catch (error) {
+    return { status: 500, data: null };
+  }
+};
+
+export const deleteUser = async (
   token: string,
   id: String
-): Promise<{ status: number; data: deleteProductResponse | null }> => {
-  const url = `${productsUrl}/${id}`;
+): Promise<{ status: number; data: deleteUserResponse | null }> => {
+  const url = `${usersUrl}/${id}`;
 
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {
     const response = await fetch(url, {
-      method: "DELETE",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "authorization-token": token,

@@ -2,22 +2,22 @@
 
 import { useStore } from "@/store";
 import { Button, message, Popconfirm, Spin } from "antd";
-import {
-  getTokenFromCookie,
-  isTokenValid,
-  storeTokenInCookie,
-} from "@/utils/helpers";
-import { useEffect, useState } from "react";
+import { storeTokenInCookie } from "@/utils/helpers";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteUser, fetchIdUser } from "@/services/apis/users-api";
-import EditModal from "@/components/myProfile/updateData";
-import { DeleteOutlined, EditOutlined, LogoutOutlined } from "@ant-design/icons";
+import { deleteUser, fetchIdUser } from "@/services/users";
+import EditModal from "@/components/my-profile/update-data";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
   const { userId } = useStore();
-  const [token, setToken] = useState("");
+  const { token } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const queryClient = useQueryClient();
@@ -29,32 +29,6 @@ export default function Home() {
   const closeModal = () => {
     setOpen(false);
   };
-
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    } else {
-      router.push(`/login`);
-    }
-  };
-
-  const validateSession = () => {
-    if (!isTokenValid(token)) {
-      router.push(`/login`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-  }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  });
 
   const fetchUpdateData = async () => {
     setLoading(true);
@@ -134,7 +108,7 @@ export default function Home() {
               cancelText="No"
             >
               <Button color="danger" variant="solid" className="flex-1">
-              <DeleteOutlined/>
+                <DeleteOutlined />
               </Button>
             </Popconfirm>
             <Button

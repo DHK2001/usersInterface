@@ -1,6 +1,8 @@
 import { setCookie, getCookie } from "cookies-next";
 import { jwtDecode } from "jwt-decode";
 
+export const publicRoutes = ["/login", "/register"];
+
 export const storeTokenInCookie = (token: any) => {
   setCookie("access_token", token, { maxAge: 60 * 60 * 24 });
 };
@@ -41,4 +43,11 @@ export const isTokenValid = (token: string) => {
     console.error("Invalid token", error);
     return false;
   }
+};
+
+export const validateSession = (token: string) => {
+  if (!isTokenValid(token)) {
+    return false;
+  }
+  return true;
 };

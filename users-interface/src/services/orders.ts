@@ -1,12 +1,19 @@
+import {
+  CreateOrderDto,
+  DeleteOrderResponse,
+  FinalizedOrderResponse,
+  Order,
+  UpdateOrderDto,
+} from "@/models/orders";
 import { dbs } from "@/store";
-import { CreateOrderDto, DeleteOrderResponse, FinalizedOrderResponse, Order, UpdateOrderDto } from "../interfaces/orders-interface";
+import { authorizationNotFound } from "@/utils/messages";
 
 const MONGO_URL = process.env.MONGO_URL;
 const MSSQL_URL = process.env.MSSQL_URL;
 
 var ordersUrl = "";
 
-if ( MONGO_URL && MSSQL_URL) {
+if (MONGO_URL && MSSQL_URL) {
   if (dbs === "mongo") {
     ordersUrl = MONGO_URL + "/orders";
   } else {
@@ -16,13 +23,13 @@ if ( MONGO_URL && MSSQL_URL) {
 
 export const fetchAllOrders = async (
   token: string,
-    id: string
+  id: string
 ): Promise<{
   status: number;
   data: Order[] | null;
 }> => {
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {
@@ -55,7 +62,7 @@ export const fetchIdOrder = async (
   const url = `${ordersUrl}/${id}`;
 
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {
@@ -83,7 +90,7 @@ export const fetchIdOrder = async (
 export const createOrder = async (
   token: string,
   order: CreateOrderDto
-): Promise<{ message: string, status: number; data: Order | null }> => {
+): Promise<{ message: string; status: number; data: Order | null }> => {
   try {
     const response = await fetch(ordersUrl, {
       method: "POST",
@@ -116,7 +123,7 @@ export const updateOrder = async (
   const url = `${ordersUrl}/${id}`;
 
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {
@@ -149,7 +156,7 @@ export const deleteOrder = async (
   const url = `${ordersUrl}/${id}`;
 
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {
@@ -181,7 +188,7 @@ export const finalizeOrder = async (
   const url = `${ordersUrl}/${id}/finalize`;
 
   if (!token) {
-    throw new Error("API key not found");
+    throw new Error(authorizationNotFound);
   }
 
   try {

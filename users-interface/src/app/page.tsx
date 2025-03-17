@@ -1,48 +1,21 @@
 "use client";
 
-import { fetchAllUsers } from "@/services/apis/users-api";
+import { fetchAllUsers } from "@/services/users";
 import { useStore } from "@/store";
-import { getTokenFromCookie, isTokenValid } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Spin, Input } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import { User } from "@/services/interfaces/users-interfaces";
+import { User } from "@/models/users";
 
 export default function Home() {
   const { userId } = useStore();
-  const [token, setToken] = useState("");
   const router = useRouter();
+  const { token } = useStore();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const fetchToken = async () => {
-    const token = await getTokenFromCookie();
-    if (token && typeof token === "string") {
-      setToken(token);
-    } else {
-      router.push(`/login`);
-    }
-  };
-
-  const validateSession = () => {
-    if (!isTokenValid(token)) {
-      router.push(`/login`);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchToken();
-  }, [token]);
-
-  useEffect(() => {
-    if (token) {
-      validateSession();
-    }
-  }, [token]);
 
   const { data: usersData, isLoading } = useQuery({
     queryKey: ["userData", token],
@@ -96,9 +69,9 @@ export default function Home() {
                     key={user.id}
                     className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm flex flex-col justify-between"
                   >
-                      <h3 className="font-semibold text-lg text-blue-600 text-center">
-                        {user.firstName} {user.lastName}
-                      </h3>
+                    <h3 className="font-semibold text-lg text-blue-600 text-center">
+                      {user.firstName} {user.lastName}
+                    </h3>
                     <button
                       className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                       onClick={() => router.push(`/users/${user.id}`)}

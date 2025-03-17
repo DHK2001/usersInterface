@@ -1,6 +1,3 @@
-import { Product } from "./products-interfaces";
-import { User } from "./users-interfaces";
-
 export interface CreateOrderDto {
   userId: string;
   products: { id: string; amount: number }[];
