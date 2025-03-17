@@ -56,7 +56,7 @@ export default function ProductDetails() {
               router.push(`/products`);
             }}
           />
-          <h2 className="mx-auto text-xl font-bold break-words max-w-md break-words">
+          <h2 className="mx-auto text-xl font-bold max-w-md break-words">
             {productData?.data?.name}
           </h2>
         </div>
