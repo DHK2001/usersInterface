@@ -86,10 +86,10 @@ export default function Products() {
                 key={product.id}
                 className="border rounded-lg p-6 shadow-md bg-white hover:shadow-lg transition-shadow max-w-sm flex flex-col justify-between"
               >
-                <h3 className="font-semibold text-lg text-blue-600">
+                <h3 className="font-semibold text-lg text-blue-600 break-words">
                   {product.name}
                 </h3>
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-gray-500 mt-2 break-words">
                   {product.description}
                 </p>
                 <button

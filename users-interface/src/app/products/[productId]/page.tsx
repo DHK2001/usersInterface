@@ -56,7 +56,7 @@ export default function ProductDetails() {
               router.push(`/products`);
             }}
           />
-          <h2 className="mx-auto text-xl font-bold">
+          <h2 className="mx-auto text-xl font-bold break-words max-w-md break-words">
             {productData?.data?.name}
           </h2>
         </div>
@@ -68,7 +68,7 @@ export default function ProductDetails() {
             <div className="flex justify-center">
               <Image width={250} src={productData?.data?.imageUrl ?? ""} />
             </div>
-            <p>
+            <p className="max-w-md break-words">
               <span className="font-semibold">Description:</span>{" "}
               {productData?.data?.description}
             </p>
