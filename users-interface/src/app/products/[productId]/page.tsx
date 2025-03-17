@@ -15,7 +15,6 @@ export default function ProductDetails() {
   const { token } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const queryClient = useQueryClient();
 
   const showModal = () => {
     setOpen(true);
@@ -23,14 +22,6 @@ export default function ProductDetails() {
 
   const closeModal = () => {
     setOpen(false);
-  };
-
-  const fetchUpdateProductData = async () => {
-    setLoading(true);
-    await queryClient.invalidateQueries({
-      queryKey: ["productData", token],
-    });
-    setLoading(false);
   };
 
   const { data: productData, isLoading } = useQuery({
@@ -117,7 +108,6 @@ export default function ProductDetails() {
                 closeModal={closeModal}
                 productData={productData?.data}
                 token={token}
-                fetchUpdateProductData={fetchUpdateProductData}
               />
             </div>
           </div>

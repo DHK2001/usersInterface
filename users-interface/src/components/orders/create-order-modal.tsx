@@ -22,7 +22,6 @@ interface Props {
   userId: string;
   openModal: boolean;
   closeModal: () => void;
-  fetchCreatedOrder: () => void;
 }
 
 function CreateOrderModal({
@@ -30,7 +29,6 @@ function CreateOrderModal({
   userId,
   openModal,
   closeModal,
-  fetchCreatedOrder,
 }: Props) {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<
@@ -122,7 +120,9 @@ function CreateOrderModal({
 
       if (response.status === 201) {
         setStatus({ type: "success", content: "Order created successfully" });
-        fetchCreatedOrder();
+        await queryClient.invalidateQueries({
+          queryKey: ["ordersData", token],
+        });
         fetchUpdateProductData();
         setSelectedProducts([]);
         setSelectedProduct(null);

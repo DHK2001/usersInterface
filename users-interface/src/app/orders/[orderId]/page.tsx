@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, message, Popconfirm, Spin, Table } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
-import UpdateOrderModal from "@/components/orders/update-order";
+import UpdateOrderModal from "@/components/orders/update-order-modal";
 import { fetchIdOrder, finalizeOrder, deleteOrder } from "@/services/orders";
 import { useStore } from "@/store";
 
@@ -138,7 +138,6 @@ export default function OrderDetails() {
                     closeModal={closeModal}
                     orderData={orderData?.data}
                     token={token}
-                    fetchUpdateOrder={fetchUpdateOrderData}
                     orderId={orderId as string}
                   />
                 </div>
@@ -181,7 +180,6 @@ export default function OrderDetails() {
                   closeModal={closeModal}
                   orderData={orderData?.data}
                   token={token}
-                  fetchUpdateOrder={fetchUpdateOrderData}
                   orderId={orderId as string}
                 />
               </div>

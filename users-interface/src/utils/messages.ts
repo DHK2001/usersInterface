@@ -1,1 +1,1 @@
-export const authorizationNotFound = "Authorization token not found";
+export const authorizationNotFound = "Request not Authorized";

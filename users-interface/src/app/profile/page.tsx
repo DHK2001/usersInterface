@@ -20,7 +20,6 @@ export default function Home() {
   const { token } = useStore();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const queryClient = useQueryClient();
 
   const showModal = () => {
     setOpen(true);
@@ -28,14 +27,6 @@ export default function Home() {
 
   const closeModal = () => {
     setOpen(false);
-  };
-
-  const fetchUpdateData = async () => {
-    setLoading(true);
-    await queryClient.invalidateQueries({
-      queryKey: ["userData", token],
-    });
-    setLoading(false);
   };
 
   const { data: userData, isLoading } = useQuery({
@@ -124,7 +115,6 @@ export default function Home() {
               closeModal={closeModal}
               userData={userData?.data}
               token={token}
-              fetchUpdateData={fetchUpdateData}
             />
           </div>
           <div className="flex mt-2 w-full">

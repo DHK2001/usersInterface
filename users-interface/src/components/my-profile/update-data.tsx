@@ -4,6 +4,7 @@ import { updateUser } from "@/services/users";
 import { UpdateUserDto, User } from "@/models/users";
 import { Form, Input, message, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 type UpdateFormValues = {
   firstName: string;
@@ -16,7 +17,6 @@ interface Props {
   userData: User | null | undefined;
   openModal: boolean;
   closeModal: () => void;
-  fetchUpdateData: () => void;
 }
 
 function EditModal({
@@ -24,8 +24,8 @@ function EditModal({
   userData,
   openModal,
   closeModal,
-  fetchUpdateData,
 }: Props) {
+  const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{
@@ -80,7 +80,9 @@ function EditModal({
 
       if (registerR.status === 200) {
         setStatus({ type: "success", content: "Data updated successfully" });
-        fetchUpdateData();
+        await queryClient.invalidateQueries({
+          queryKey: ["userData", token],
+        });
         form.resetFields();
         closeModal();
       } else if (registerR.status === 400) {

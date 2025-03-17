@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Spin, Input, Button, Select } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import CreateOrderModal from "@/components/orders/create-order";
+import CreateOrderModal from "@/components/orders/create-order-modal";
 import { Order } from "@/models/orders";
 import { useStore } from "@/store";
 import { fetchAllOrders } from "@/services/orders";
@@ -27,14 +27,6 @@ export default function Orders() {
 
   const closeModal = () => {
     setOpen(false);
-  };
-
-  const fetchCreatedOrder = async () => {
-    setLoading(true);
-    await queryClient.invalidateQueries({
-      queryKey: ["ordersData", token],
-    });
-    setLoading(false);
   };
 
   const { data: ordersData, isLoading } = useQuery({
@@ -109,7 +101,6 @@ export default function Orders() {
           closeModal={closeModal}
           token={token}
           userId={userId}
-          fetchCreatedOrder={fetchCreatedOrder}
         />
 
         {filteredOrders.length > 0 ? (

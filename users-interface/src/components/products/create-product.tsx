@@ -4,6 +4,7 @@ import { createProduct } from "@/services/products";
 import { CreateProductDto } from "@/models/products";
 import { Form, Input, message, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 type UpdateFormValues = {
   name: string;
@@ -17,15 +18,14 @@ interface Props {
   token: string;
   openModal: boolean;
   closeModal: () => void;
-  fetchCreatedProduct: () => void;
 }
 
 function CreateProductModal({
   token,
   openModal,
   closeModal,
-  fetchCreatedProduct,
 }: Props) {
+  const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{
@@ -59,7 +59,9 @@ function CreateProductModal({
 
       if (registerR.status === 201) {
         setStatus({ type: "success", content: "Product created successfully" });
-        fetchCreatedProduct();
+        await queryClient.invalidateQueries({
+          queryKey: ["productsData", token],
+        });
         form.resetFields();
         closeModal();
       } else if (registerR.status === 400) {

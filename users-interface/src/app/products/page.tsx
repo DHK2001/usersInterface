@@ -17,7 +17,6 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const queryClient = useQueryClient();
 
   const showModal = () => {
     setOpen(true);
@@ -25,14 +24,6 @@ export default function Products() {
 
   const closeModal = () => {
     setOpen(false);
-  };
-
-  const fetchUpdateData = async () => {
-    setLoading(true);
-    await queryClient.invalidateQueries({
-      queryKey: ["productsData", token],
-    });
-    setLoading(false);
   };
 
   const { data: productsData, isLoading } = useQuery({
@@ -87,7 +78,6 @@ export default function Products() {
           openModal={open}
           closeModal={closeModal}
           token={token}
-          fetchCreatedProduct={fetchUpdateData}
         />
         {filteredProducts.length > 0 ? (
           <div className={`grid ${dynamicGrid()} gap-6 w-full max-w-screen-lg`}>

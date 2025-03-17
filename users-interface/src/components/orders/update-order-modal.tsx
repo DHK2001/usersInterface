@@ -22,7 +22,6 @@ interface Props {
   orderId: string;
   openModal: boolean;
   closeModal: () => void;
-  fetchUpdateOrder: () => void;
   orderData: Order | null | undefined;
 }
 
@@ -31,7 +30,6 @@ function UpdateOrderModal({
   orderId,
   openModal,
   closeModal,
-  fetchUpdateOrder,
   orderData,
 }: Props) {
   const [products, setProducts] = useState<Product[]>([]);
@@ -141,7 +139,9 @@ function UpdateOrderModal({
 
       if (response.status === 200) {
         setStatus({ type: "success", content: "Order updated successfully." });
-        fetchUpdateOrder();
+        await queryClient.invalidateQueries({
+          queryKey: ["orderData", token],
+        });
         fetchUpdateProductData();
         setSelectedProduct(null);
         closeModal();
